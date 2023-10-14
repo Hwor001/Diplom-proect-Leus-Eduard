@@ -1,0 +1,32 @@
+.App {
+  --backgrpund-primary-color: #f3f3f3;
+  --text-primary-color: black;
+  --text-secondary-color: gray;
+  --border-color: black;
+
+  &.dark {
+    --backgrpund-primary-color: black;
+    --text-primary-color: white;
+    --text-secondary-color: gray;
+    --border-color: white;
+  }
+}
+
+& a {
+  all: unset;
+  color: var(--text-primary-color);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pic1 {
+  width: 18px;
+}
+
+.pic2 {
+  width: 18px;
+}
+
+.pic3 {
+  width: 18px;
+}
