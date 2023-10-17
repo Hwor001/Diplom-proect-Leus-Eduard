@@ -25,7 +25,12 @@ export const MainTemplate: React.FC<Props> = ({
         </Main>
         <Footer>
           <FooterDeliniter />
-          <Year>{new Date().getFullYear()}</Year>
+          <NameLogoReservedYearWrapper>
+            <Year>
+              {new Date().getFullYear()} <NameLogo>Bookstore</NameLogo>
+            </Year>
+            <Reserved>All rights reserved</Reserved>
+          </NameLogoReservedYearWrapper>
         </Footer>
       </ContetntWithPaddings>
     </MainTemplateWraper>
@@ -82,5 +87,14 @@ const Footer = styled.footer`
 const FooterDeliniter = styled.hr`
   width: 100%;
 `;
+
+const NameLogoReservedYearWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const NameLogo = styled.span``;
+
+const Reserved = styled.span``;
 
 const Year = styled.div``;

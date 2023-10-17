@@ -1,30 +1,21 @@
 import { Button } from '../../ui/button/button';
 import { Input } from '#ui/input/input';
 import styled from 'styled-components';
-import {
-  setName,
-  setEmail,
-  setPassword,
-  setConfirmedPassword,
-} from './sing-up-form.slice';
+import { setEmail } from '../sing-up-form/sing-up-form.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../auth/registration.slice';
+import { Title } from '#ui/title/title';
 
-export const SingUpForm: React.FC = () => {
+export const ResetPasswordForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const nameInputRef = useRef<HTMLInputElement | null>(null);
   const emailInputRef = useRef<HTMLInputElement | null>(null);
-  const passwordInputRef = useRef<HTMLInputElement | null>(null);
-  const confirmedPasswordInputRef = useRef<HTMLInputElement | null>(null);
   const name = useAppSelector(({ signUpForm }) => signUpForm.name);
   const email = useAppSelector(({ signUpForm }) => signUpForm.email);
   const password = useAppSelector(({ signUpForm }) => signUpForm.password);
-  const confirmedPassword = useAppSelector(
-    ({ signUpForm }) => signUpForm.confirmedPassword
-  );
+
   const isCompleted = useAppSelector(
     ({ registration }) => registration.isCompleted
   );
@@ -36,14 +27,7 @@ export const SingUpForm: React.FC = () => {
 
   return (
     <RegistrationWrapper>
-      <Input
-        type="text"
-        labelText="Name"
-        inputText="Your name"
-        value={name}
-        onChange={({ currentTarget }) => dispatch(setName(currentTarget.value))}
-        ref={nameInputRef}
-      />
+      <Title>reset password</Title>
       <Input
         type="email"
         labelText="Email"
@@ -54,31 +38,11 @@ export const SingUpForm: React.FC = () => {
         }
         ref={emailInputRef}
       />
-      <Input
-        type="password"
-        labelText="Password"
-        inputText="Your password"
-        value={password}
-        onChange={({ currentTarget }) =>
-          dispatch(setPassword(currentTarget.value))
-        }
-        ref={passwordInputRef}
-      />
-      <Input
-        type="password"
-        labelText="Confirm password"
-        inputText="Confirm your password"
-        value={confirmedPassword}
-        onChange={({ currentTarget }) =>
-          dispatch(setConfirmedPassword(currentTarget.value))
-        }
-        ref={confirmedPasswordInputRef}
-      />
       <Button
         variant="primary"
         onClick={() => dispatch(register({ username: name, password }))}
       >
-        Sign Up
+        go to home
       </Button>
     </RegistrationWrapper>
   );

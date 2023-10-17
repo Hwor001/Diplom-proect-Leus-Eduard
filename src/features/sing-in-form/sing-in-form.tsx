@@ -3,25 +3,30 @@ import { Input } from '#ui/input/input';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setName, setPassword } from '../sing-up-form/sing-up-form.slice';
+import { setEmail, setPassword } from '../sing-up-form/sing-up-form.slice';
+import { Button2 } from '#ui/button/button2';
 
 export const SingInForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const name = useAppSelector(({ signUpForm }) => signUpForm.name);
+  const email = useAppSelector(({ signUpForm }) => signUpForm.email);
   const password = useAppSelector(({ signUpForm }) => signUpForm.password);
   const handleRegistration = () => {
-    navigate('/success');
+    // navigate('/success');
   };
+
+  const ForgotPassword = () => {};
 
   return (
     <RegistrationWrapper>
       <Input
-        type="text"
-        labelText="Name"
-        inputText="Your name"
-        value={name}
-        onChange={({ currentTarget }) => dispatch(setName(currentTarget.value))}
+        type="email"
+        labelText="Email"
+        inputText="Your email"
+        value={email}
+        onChange={({ currentTarget }) =>
+          dispatch(setEmail(currentTarget.value))
+        }
       />
       <Input
         type="password"
@@ -32,6 +37,7 @@ export const SingInForm: React.FC = () => {
           dispatch(setPassword(currentTarget.value))
         }
       />
+      <Button2 onClick={ForgotPassword}>Forgot password ?</Button2>
       <Button variant="primary" onClick={handleRegistration}>
         Sing in
       </Button>
@@ -40,6 +46,6 @@ export const SingInForm: React.FC = () => {
 };
 
 const RegistrationWrapper = styled.div`
-  border: 1px solid var(--text-primary-color);
-  padding: 40px;
+  border-top: 1px solid #e7e7e7;
+  padding: 31px;
 `;

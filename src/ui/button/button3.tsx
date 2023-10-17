@@ -7,7 +7,7 @@ type Props = {
   onClick: () => void;
 };
 
-export const Button: React.FC<Props> = ({
+export const Button3: React.FC<Props> = ({
   variant,
   children,
   disabled,
@@ -48,8 +48,8 @@ const ButtonWrapper = styled.button<{
       case 'primary': {
         return css`
           border: 1px solid white;
-          background: #313037;
-          color: white;
+          background: white;
+          color: #313037;
         `;
       }
       default:

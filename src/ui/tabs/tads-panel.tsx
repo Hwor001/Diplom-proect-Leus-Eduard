@@ -57,7 +57,6 @@ const Tab: React.FC<TabProps> = ({ id, title, isActive, onClick }) => {
 
 const TabWrapper = styled.li<{ $isActive: boolean }>`
   display: block;
-  margin-bottom: 32px;
   border-bottom: ${({ $isActive }) => {
     return $isActive && css`1px solid var(--text-primary-color)`;
   }};
