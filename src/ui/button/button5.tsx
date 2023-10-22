@@ -6,7 +6,7 @@ interface Props {
   onClick: () => void;
 }
 
-export const Button4: React.FC<Props> = ({ children, disabled, onClick }) => {
+export const Button5: React.FC<Props> = ({ children, disabled, onClick }) => {
   return (
     <ButtonWrapper type="button" disabled={disabled} onClick={onClick}>
       {children}
@@ -17,9 +17,7 @@ export const Button4: React.FC<Props> = ({ children, disabled, onClick }) => {
 const ButtonWrapper = styled.button`
   all: unset;
   cursor: pointer;
-  width: 52px;
-  height: 52px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 17px 17px;
+  position: absolute;
+  transform: translateX(-50px);
 `;

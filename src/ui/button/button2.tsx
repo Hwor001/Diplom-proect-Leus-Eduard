@@ -18,4 +18,7 @@ const ButtonWrapper = styled.button`
   all: unset;
   cursor: pointer;
   margin-bottom: 40px;
+  &:hover {
+    color: blue;
+  }
 `;

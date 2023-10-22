@@ -5,10 +5,20 @@ export type RegistrationPayload = {
 
 export interface Post {
   id: number;
+  rating: number;
+  desc: string;
   image: any;
-  text: string;
-  date: string;
-  lesson_num: number;
+  subtitle: string;
   title: string;
-  author: number;
+  authors: string;
+  price: string;
+  publisher: string;
+  year: number;
+  pages: number;
+  language: string;
+  format: string;
+  isbn10: number;
+  isbn13: number;
+  error: number;
+  url: any;
 }

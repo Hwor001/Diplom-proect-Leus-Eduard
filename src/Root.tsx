@@ -1,4 +1,5 @@
 import { Account } from '#ui/pages/account';
+import { MainBookStore } from '#ui/pages/main-bookstore';
 import { NewPassword } from '#ui/pages/new-password';
 import { PageSingInAndUp } from '#ui/pages/page-sing-in-and-up';
 import { ResetPassword } from '#ui/pages/reset-password';
@@ -22,6 +23,7 @@ export function Root() {
       <ResetPassword></ResetPassword>
       <NewPassword></NewPassword>
       <Account></Account>
+      <MainBookStore></MainBookStore>
     </div>
   );
 }

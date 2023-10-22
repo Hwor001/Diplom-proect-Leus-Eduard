@@ -43,7 +43,6 @@ const MainTemplateWraper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   height: auto;
   background-color: var(--backgrpund-primary-color);
 `;
@@ -54,7 +53,7 @@ const Main = styled.div`
 `;
 
 const ContetntWithPaddings = styled.div`
-  width: 70%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   flex-grow: 1;

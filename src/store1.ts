@@ -4,10 +4,12 @@ import { signUpFormReducer } from './features/sing-up-form/sing-up-form.slice';
 import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from './sagas';
 import { registrationReducer } from '#features/auth/registration.slice';
+import postsReducer from './features/postactive/all-post.slice';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
+  allPosts: postsReducer,
   signUpForm: signUpFormReducer,
   registration: registrationReducer,
 });
