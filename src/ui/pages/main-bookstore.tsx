@@ -1,38 +1,23 @@
 import { MainTemplate } from '#ui/templates/main-template';
-import { Backlink } from '../../features/back-link/back-link';
+import { BackLink } from '../../features/back-link/back-link';
 import { Title2 } from '#ui/title/title2';
 import Header from '#ui/header/header';
 import { MainBookStoreForm } from '#features/main-blog/maim-bookstore-form';
-import { allPosts } from '../../Posts';
 import { useAppDispatch, useAppSelector } from '#hooks';
-
-import {
-  getAllPostsFailure,
-  getAllPostsSuccess,
-  getAllposts,
-} from '../../features/postactive/all-post.slice';
+import { getAllposts } from '../../features/postactive/all-post.slice';
 import { useEffect } from 'react';
+import { Response } from '#features/auth/types';
 
-export const MainBookStore: React.FC = () => {
+interface Props {
+  handleSearch: (searchText: string) => void;
+  response: Response;
+}
+
+export const MainBookStore: React.FC<Props> = ({ handleSearch, response }) => {
   const dispatch = useAppDispatch();
   const { posts, isLoading } = useAppSelector(({ allPosts }) => allPosts);
   useEffect(() => {
     dispatch(getAllposts());
-  }, [dispatch]);
-
-  useEffect(() => {
-    const timedId = setTimeout(() => {
-      if (Math.random() < 0.5) {
-        dispatch(getAllPostsSuccess({ posts: allPosts }));
-      } else {
-        dispatch(
-          getAllPostsFailure({ name: 'Error', message: 'SERVER ERROR' })
-        );
-      }
-    }, 3000);
-    return () => {
-      clearTimeout(timedId);
-    };
   }, [dispatch]);
 
   if (isLoading) {
@@ -43,10 +28,10 @@ export const MainBookStore: React.FC = () => {
   }
   return (
     <MainTemplate
-      header={<Header />}
-      backLink={<Backlink />}
+      header={<Header handleSearch={handleSearch} />}
+      backLink={<BackLink />}
       title={<Title2>New Releases Books</Title2>}
-      body={<MainBookStoreForm posts={posts} />}
+      body={<MainBookStoreForm posts={posts} response={response} />}
     />
   );
 };

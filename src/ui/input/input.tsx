@@ -2,7 +2,7 @@ import React, { forwardRef, InputHTMLAttributes, Ref } from 'react';
 import styled from 'styled-components';
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
-  labelText: string;
+  labelText?: string;
   inputText: string;
   error?: string;
 };
@@ -14,13 +14,13 @@ export const Input = forwardRef(
   ) => {
     return (
       <Label>
-        <LabelText>{labelText}</LabelText>
+        {labelText && <LabelText>{labelText}</LabelText>}
         <InputWrapper
           placeholder={inputText}
           {...restProps}
           ref={ref as React.RefObject<HTMLInputElement>}
         />
-        <Error>{error}</Error>
+        {error && <Error>{error}</Error>}
       </Label>
     );
   }

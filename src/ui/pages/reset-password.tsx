@@ -3,6 +3,15 @@ import Header from '#ui/header/header';
 import { MainTemplate } from '#ui/templates/main-template';
 // import { Backlink } from '../../features/back-link/back-link';
 
-export const ResetPassword: React.FC = () => {
-  return <MainTemplate header={<Header />} body={<ResetPasswordForm />} />;
+interface Props {
+  handleSearch: (searchText: string) => void;
+}
+
+export const ResetPassword: React.FC<Props> = ({ handleSearch }) => {
+  return (
+    <MainTemplate
+      header={<Header handleSearch={handleSearch} />}
+      body={<ResetPasswordForm />}
+    />
+  );
 };

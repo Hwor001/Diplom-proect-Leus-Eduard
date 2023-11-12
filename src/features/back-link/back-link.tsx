@@ -1,9 +1,29 @@
-import { styled } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-export const Backlink: React.FC = () => {
-  return <BacklinkWrapper>Back to home</BacklinkWrapper>;
+export const BackLink: React.FC = () => {
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
+  return (
+    <BackLinkWrapper>
+      <BackLinkText onClick={goBack}>Back to home</BackLinkText>
+    </BackLinkWrapper>
+  );
 };
 
-const BacklinkWrapper = styled.div`
-  color: var(--text-primary-color);
+const BackLinkWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
 `;
+
+const BackLinkText = styled.div`
+  color: var(--text-primary-color);
+  margin: 40px 20px 0 20px;
+  cursor: pointer;
+`;
+
+export default BackLink;

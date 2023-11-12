@@ -1,29 +1,31 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSearch,
-  faUser,
-  faHeart,
-  faBagShopping,
-} from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faBasketShopping } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faUser } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import { Button4 } from '#ui/button/button4';
 import { Button5 } from '#ui/button/button5';
 import { Button6 } from '#ui/button/button6';
 import BookstoreWord from '../../svg/Bookstore.svg';
+// import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-export const Header: React.FC = () => {
+interface Props {
+  handleSearch: (searchText: string) => void;
+}
+
+export const Header: React.FC<Props> = ({ handleSearch }) => {
+  // const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
-  //   const name = 'Leus Eduard';
-  //   const savedName = name || '';
+  const [page, setPage] = useState(1);
   const Bookstore = () => {};
   const Search = () => {
-    console.log('seach');
+    console.log('seach', inputValue);
+    handleSearch(inputValue);
   };
   const Heart = () => {};
   const Shopping = () => {};
   const User = () => {};
-
   return (
     <HeaderWrapper>
       <Button6 onClick={Bookstore}>
@@ -37,20 +39,28 @@ export const Header: React.FC = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <Button5 onClick={Search}>
-          <FontAwesomeIcon icon={faSearch} />
-        </Button5>
+        <Link to={`/search/${inputValue}/${page}`}>
+          <Button5 onClick={Search}>
+            <FontAwesomeIcon icon={faSearch} />
+          </Button5>
+        </Link>
       </SeachWrapper>
       <ButtonWrapper>
-        <Button4 onClick={Heart}>
-          <FontAwesomeIcon icon={faHeart} />
-        </Button4>
-        <Button4 onClick={Shopping}>
-          <FontAwesomeIcon icon={faBagShopping} />
-        </Button4>
-        <Button4 onClick={User}>
-          <FontAwesomeIcon icon={faUser} />
-        </Button4>
+        <Link to={`/Favorite`}>
+          <Button4 onClick={Heart}>
+            <FontAwesomeIcon icon={faHeart} />
+          </Button4>
+        </Link>
+        <Link to={`/Basket`}>
+          <Button4 onClick={Shopping}>
+            <FontAwesomeIcon icon={faBasketShopping} />
+          </Button4>
+        </Link>
+        <Link to={`/Account`}>
+          <Button4 onClick={User}>
+            <FontAwesomeIcon icon={faUser} />
+          </Button4>
+        </Link>
       </ButtonWrapper>
     </HeaderWrapper>
   );

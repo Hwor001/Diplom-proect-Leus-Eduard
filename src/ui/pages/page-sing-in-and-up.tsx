@@ -4,6 +4,15 @@ import { MainTemplate } from '#ui/templates/main-template';
 // import { Title } from '#ui/title/title';
 // import { Backlink } from '../../features/back-link/back-link';
 
-export const PageSingInAndUp: React.FC = () => {
-  return <MainTemplate header={<Header />} body={<TabsActive />} />;
+interface Props {
+  handleSearch: (searchText: string) => void;
+}
+
+export const PageSingInAndUp: React.FC<Props> = ({ handleSearch }) => {
+  return (
+    <MainTemplate
+      header={<Header handleSearch={handleSearch} />}
+      body={<TabsActive />}
+    />
+  );
 };

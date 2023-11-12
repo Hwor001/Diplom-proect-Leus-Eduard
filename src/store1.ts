@@ -5,11 +5,17 @@ import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from './sagas';
 import { registrationReducer } from '#features/auth/registration.slice';
 import postsReducer from './features/postactive/all-post.slice';
+import postReducer from './features/postactive/Post.slice';
+import favoriteBooksReducer from '#features/postactive/favorite.slice';
+import basketSlice from '#features/postactive/basket.slice';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
   allPosts: postsReducer,
+  favoriteBooks: favoriteBooksReducer,
+  basketBooks: basketSlice,
+  Post: postReducer,
   signUpForm: signUpFormReducer,
   registration: registrationReducer,
 });

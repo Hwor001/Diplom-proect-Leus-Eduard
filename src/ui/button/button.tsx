@@ -32,6 +32,7 @@ const ButtonWrapper = styled.button<{
   $fitContent?: boolean;
 }>`
   all: unset;
+  display: block;
   font-family: 'Bebas Neue';
   font-weight: 500;
   font-size: 24px;
@@ -39,7 +40,6 @@ const ButtonWrapper = styled.button<{
   text-align: center;
   height: 56px;
   cursor: pointer;
-  padding: 5px 10px;
   width: ${({ $fitContent }) =>
     $fitContent ? 'fit-content' : 'calc(100% - 20px)'};
 
