@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 export const BackLink: React.FC = () => {
   const navigate = useNavigate();
@@ -10,7 +12,7 @@ export const BackLink: React.FC = () => {
 
   return (
     <BackLinkWrapper>
-      <BackLinkText onClick={goBack}>Back to home</BackLinkText>
+      <FontAwesomeIcon icon={faArrowLeft} onClick={goBack} />
     </BackLinkWrapper>
   );
 };
@@ -18,12 +20,14 @@ export const BackLink: React.FC = () => {
 const BackLinkWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
-`;
-
-const BackLinkText = styled.div`
-  color: var(--text-primary-color);
-  margin: 40px 20px 0 20px;
   cursor: pointer;
+
+  & svg {
+    color: var(--text-primary-color);
+    height: 40px;
+    margin-top: 22px;
+    cursor: pointer;
+  }
 `;
 
 export default BackLink;

@@ -37,4 +37,9 @@ export const TabsSelectedBook: React.FC<ListOfPostsProps> = ({ book }) => {
 
 const TabsWrapper = styled.div`
   border: 1px solid #e7e7e7;
+  width: 1120px;
+
+  & ul {
+    justify-content: flex-start;
+  }
 `;

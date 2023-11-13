@@ -11,9 +11,7 @@ import { TabsSelectedBook } from '#features/tabs-active/tabs-selected-book';
 import { NewsLetter } from '#features/newsletter/newsletter-form';
 import { Button } from '#ui/button/button';
 import { Button2 } from '#ui/button/button2';
-import { Button4 } from '#ui/button/button4';
 import { faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addToFavorites,
@@ -24,6 +22,7 @@ import {
   deleteItemFromCart,
 } from '../../features/postactive/basket.slice';
 import { RootState, store } from '../../store1';
+import { setQuantity } from '../../features/postactive/quantity.slice';
 
 interface StarRatingProps {
   rating: number;
@@ -62,9 +61,16 @@ export const SelectedBookForm: React.FC<BookProps> = ({ response }) => {
     (state: RootState) => state.basketBooks.itemsInCart
   );
   const isItemInCart = items.some((item) => item.isbn13 === response.isbn13);
+  const quantity = useSelector(
+    (state: RootState) => state.basketQuantity[response.isbn13] || 0
+  );
 
   const addToCart = () => {
     console.log('response', response);
+    const updatedQuantity = isItemInCart ? quantity - 1 : 1;
+    dispatch(
+      setQuantity({ isbn13: response.isbn13, quantity: updatedQuantity })
+    );
     if (isItemInCart) {
       dispatch(deleteItemFromCart(response.isbn13));
     } else {
@@ -91,11 +97,12 @@ export const SelectedBookForm: React.FC<BookProps> = ({ response }) => {
             <ImageWrapper>
               {<img src={response.image} alt={`Post ${response.isbn13}`} />}
             </ImageWrapper>
-            <ButtonWrapper>
-              <Button4 onClick={Heart}>
-                <FontAwesomeIcon icon={isFavorite ? fasHeart : faHeart} />{' '}
-              </Button4>
-            </ButtonWrapper>
+            <FontWrapper>
+              <FontAwesomeIcon
+                onClick={Heart}
+                icon={isFavorite ? fasHeart : faHeart}
+              />{' '}
+            </FontWrapper>
             <InfoWrapper>
               <PriceWrapper>
                 <MoneyWrapper>{response.price}</MoneyWrapper>
@@ -137,17 +144,11 @@ export const SelectedBookForm: React.FC<BookProps> = ({ response }) => {
             </InfoWrapper>
           </ImageAndInfoBookWrapper>
           <TabsSelectedBook book={response} />
-          <ButtonWraper>
-            <Button4 onClick={Facebook}>
-              <FontAwesomeIcon icon={faFacebookF} />
-            </Button4>
-            <Button4 onClick={Twiter}>
-              <FontAwesomeIcon icon={faTwitter} />
-            </Button4>
-            <Button4 onClick={more}>
-              <FontAwesomeIcon icon={faEllipsis} />
-            </Button4>
-          </ButtonWraper>
+          <FontsWrapper>
+            <FontAwesomeIcon onClick={Facebook} icon={faFacebookF} />
+            <FontAwesomeIcon onClick={Twiter} icon={faTwitter} />
+            <FontAwesomeIcon onClick={more} icon={faEllipsis} />
+          </FontsWrapper>
           <NewsLetter />
         </>
       </MainBookStoreWrapper>
@@ -155,10 +156,18 @@ export const SelectedBookForm: React.FC<BookProps> = ({ response }) => {
   );
 };
 
-const ButtonWrapper = styled.div`
+const FontWrapper = styled.div`
   position: absolute;
   background: white;
-  transform: translate3d(-148px, 25px, 10px);
+  padding: 16px;
+  // transform: translate3d(-148px, 25px, 10px);
+  transform: translate(40%, 15%);
+
+  & svg {
+    cursor: pointer;
+    width: 18px;
+    height: 16px;
+  }
 `;
 
 const SelectedBookWrapper = styled.div``;
@@ -170,10 +179,22 @@ const ImageAndInfoBookWrapper = styled.div`
   justify-content: center;
 `;
 
-const ImageWrapper = styled.div``;
+const ImageWrapper = styled.div`
+  width: 544px;
+  height: 472px;
 
-const ButtonWraper = styled.div`
+  & img {
+    transform: translate(40%, 15%);
+  }
+`;
+
+const FontsWrapper = styled.div`
   display: flex;
+
+  & svg {
+    padding: 16px;
+    cursor: pointer;
+  }
 `;
 
 const InfoWrapper = styled.div`
@@ -181,6 +202,10 @@ const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  & button {
+    width: -webkit-fill-available;
+  }
 `;
 
 const PriceWrapper = styled.div`
@@ -188,9 +213,18 @@ const PriceWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const StarWrapper = styled.div``;
+const StarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 80px;
+`;
 
-const MoneyWrapper = styled.div``;
+const MoneyWrapper = styled.div`
+  font-family: 'Bebas Neue';
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 60px;
+`;
 
 const DopInfoWrapper = styled.div`
   display: flex;
@@ -200,8 +234,16 @@ const DopInfoWrapper = styled.div`
 const TextWrapper = styled.div`
   white-space: pre-line;
   color: #a8a8a8;
+  font-family: 'Helios';
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
 `;
 
 const Text2Wrapper = styled.div`
   white-space: pre-line;
+  font-family: 'Helios';
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
 `;

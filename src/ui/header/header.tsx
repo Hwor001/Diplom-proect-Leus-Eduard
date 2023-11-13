@@ -3,8 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faBasketShopping } from '@fortawesome/free-solid-svg-icons';
 import { faHeart, faUser } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
-import { Button4 } from '#ui/button/button4';
-import { Button5 } from '#ui/button/button5';
 import { Button6 } from '#ui/button/button6';
 import BookstoreWord from '../../svg/Bookstore.svg';
 // import { useNavigate } from 'react-router-dom';
@@ -40,34 +38,26 @@ export const Header: React.FC<Props> = ({ handleSearch }) => {
           onChange={(e) => setInputValue(e.target.value)}
         />
         <Link to={`/search/${inputValue}/${page}`}>
-          <Button5 onClick={Search}>
-            <FontAwesomeIcon icon={faSearch} />
-          </Button5>
+          <FontAwesomeIcon icon={faSearch} onClick={Search} />
         </Link>
       </SeachWrapper>
-      <ButtonWrapper>
+      <FontWrapper>
         <Link to={`/Favorite`}>
-          <Button4 onClick={Heart}>
-            <FontAwesomeIcon icon={faHeart} />
-          </Button4>
+          <FontAwesomeIcon icon={faHeart} onClick={Heart} />
         </Link>
         <Link to={`/Basket`}>
-          <Button4 onClick={Shopping}>
-            <FontAwesomeIcon icon={faBasketShopping} />
-          </Button4>
+          <FontAwesomeIcon icon={faBasketShopping} onClick={Shopping} />
         </Link>
         <Link to={`/Account`}>
-          <Button4 onClick={User}>
-            <FontAwesomeIcon icon={faUser} />
-          </Button4>
+          <FontAwesomeIcon icon={faUser} onClick={User} />
         </Link>
-      </ButtonWrapper>
+      </FontWrapper>
     </HeaderWrapper>
   );
 };
 
 const HeaderWrapper = styled.div`
-  width: 100%;
+  width: 80%;
   display: flex;
   position: relative;
   justify-content: space-between;
@@ -89,11 +79,20 @@ const SeachWrapper = styled.div`
       text-indent: 25px;
     }
   }
+  & svg {
+    position: absolute;
+    transform: translate(-30px, 23px);
+  }
 `;
 
-const ButtonWrapper = styled.div`
+const FontWrapper = styled.div`
   display: flex;
   align-items: center;
+
+  & svg {
+    padding: 15px;
+    cursor: pointer;
+  }
 `;
 
 export default Header;

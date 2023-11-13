@@ -2,11 +2,13 @@ import { Response } from '#features/auth/types';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar as fasFaStar } from '@fortawesome/free-solid-svg-icons';
+import {
+  faStar as fasFaStar,
+  faHeart,
+} from '@fortawesome/free-solid-svg-icons';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { RootState, store } from '../../store1';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button } from '#ui/button/button';
 import { removeFromFavorites } from '../../features/postactive/favorite.slice';
 
 interface StarRatingProps {
@@ -40,31 +42,42 @@ export const FavoriteBook: React.FC<BookProps> = ({ response }) => {
   const items = useSelector(
     (state: RootState) => state.favoriteBooks.favorites
   );
-  const Deleted = (element: Response) => {
+
+  const handleDelete = (element: Response) => {
     dispatch(removeFromFavorites(element.isbn13));
     console.log('After dispatch:', store.getState());
   };
+
   return (
     <>
       {items.length > 0
         ? items.map((element: Response) => (
             <PostsWrapper key={element.isbn13}>
-              <PostImg>
-                {<img src={element.image} alt={`Post ${element.isbn13}`} />}
-              </PostImg>
-              <Link to={`/books/${element.isbn13}`}>
-                <TitleWrapper>{element.title}</TitleWrapper>
-              </Link>
-              <AuthorPublisherPublishedWrapper>
-                {`by ${element.authors}. ${element.publisher} ${element.year}`}
-              </AuthorPublisherPublishedWrapper>
-              <PriceWraper>
-                {element.price}
-                <StarRating rating={element.rating} />
-              </PriceWraper>
-              <Button variant="primary" onClick={() => Deleted(element)}>
-                Deleted
-              </Button>
+              <ImgInfoWrapper>
+                <PostImg>
+                  {<img src={element.image} alt={`Post ${element.isbn13}`} />}
+                </PostImg>
+                <Infowrapper>
+                  <Link to={`/books/${element.isbn13}`}>
+                    <TitleWrapper>{element.title}</TitleWrapper>
+                  </Link>
+                  <AuthorPublisherPublishedWrapper>
+                    {`by ${element.authors}. ${element.publisher} ${element.year}`}
+                  </AuthorPublisherPublishedWrapper>
+                  <PriceWraper>
+                    {element.price}
+                    <StarRating rating={element.rating} />
+                  </PriceWraper>
+                </Infowrapper>
+              </ImgInfoWrapper>
+              <FontAwesomeIconWrapper>
+                <FontWrapper>
+                  <FontAwesomeIcon
+                    onClick={() => handleDelete(element)}
+                    icon={faHeart}
+                  />
+                </FontWrapper>
+              </FontAwesomeIconWrapper>
             </PostsWrapper>
           ))
         : 'Постов нет'}
@@ -72,9 +85,34 @@ export const FavoriteBook: React.FC<BookProps> = ({ response }) => {
   );
 };
 
+const FontWrapper = styled.div`
+  & > svg {
+    width: 18px;
+    height: auto;
+    cursor: pointer;
+  }
+`;
+
 const PostsWrapper = styled.div`
   //   width: 352px;
   height: auto;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Infowrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const ImgInfoWrapper = styled.div`
+  display: flex;
+`;
+
+const FontAwesomeIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const TitleWrapper = styled.p`
@@ -86,11 +124,16 @@ const TitleWrapper = styled.p`
 
 const PostImg = styled.div`
   text-align: center;
+  width: 200px;
+
+  & img {
+    width: 100%;
+    height: auto;
+  }
 `;
 
 const PriceWraper = styled.div`
   display: flex;
-  justify-content: space-between;
   font-family: 'Bebas Neue';
   font-weight: 700;
   font-size: 24px;
@@ -98,6 +141,7 @@ const PriceWraper = styled.div`
 `;
 
 const StarWrapper = styled.div`
+  margin-left: 187px;
   & svg {
     width: 14px;
     height: 13px;

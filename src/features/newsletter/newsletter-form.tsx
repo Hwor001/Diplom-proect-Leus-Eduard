@@ -43,7 +43,8 @@ const ButtonWrapper = styled.div`
 `;
 
 const SubscribeToNewsletterWrapper = styled.div`
-  margin: auto;
+  display: grid;
+  justify-content: center;
 `;
 
 const InputButttonWrapper = styled.div`

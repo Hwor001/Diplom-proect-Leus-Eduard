@@ -7,17 +7,19 @@ import { registrationReducer } from '#features/auth/registration.slice';
 import postsReducer from './features/postactive/all-post.slice';
 import postReducer from './features/postactive/Post.slice';
 import favoriteBooksReducer from '#features/postactive/favorite.slice';
-import basketSlice from '#features/postactive/basket.slice';
+import basketReducer from '#features/postactive/basket.slice';
+import basketQualityReducer from '#features/postactive/quantity.slice';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
   allPosts: postsReducer,
   favoriteBooks: favoriteBooksReducer,
-  basketBooks: basketSlice,
+  basketBooks: basketReducer,
   Post: postReducer,
   signUpForm: signUpFormReducer,
   registration: registrationReducer,
+  basketQuantity: basketQualityReducer,
 });
 
 export const store = configureStore({

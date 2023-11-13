@@ -20,11 +20,12 @@ export const FavoriteForm: React.FC<BookProps> = ({ response }) => {
   );
 };
 
-const AllWrapper = styled.div``;
+const AllWrapper = styled.div`
+  width: -webkit-fill-available;
+`;
 
 const FavoriteWrapper = styled.div`
-  width: 100%;
+  width: -webkit-fill-available;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
 `;

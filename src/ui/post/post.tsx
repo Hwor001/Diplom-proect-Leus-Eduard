@@ -40,7 +40,7 @@ export const Posts: React.FC<PostProps> = ({ post, response }) => {
       <Link to={`/books/${post.isbn13}`}>
         <TitleWrapper>{post.title}</TitleWrapper>
       </Link>
-      <StarRatingForm response={response} />
+      {/* <StarRatingForm response={response} /> */}
     </PostsWrapper>
   );
 };

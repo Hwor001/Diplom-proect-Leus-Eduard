@@ -14,4 +14,5 @@ const RegistrationWrapper = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 32px;
+  padding: 48px 0;
 `;

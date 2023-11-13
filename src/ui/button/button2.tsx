@@ -16,8 +16,10 @@ export const Button2: React.FC<Props> = ({ children, disabled, onClick }) => {
 
 const ButtonWrapper = styled.button`
   all: unset;
+  display: flex;
   cursor: pointer;
-  margin-bottom: 40px;
+  margin-top: 40px;
+  justify-content: center;
   &:hover {
     color: blue;
   }
