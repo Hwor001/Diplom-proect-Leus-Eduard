@@ -10,6 +10,7 @@ import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { RootState, store } from '../../store1';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromFavorites } from '../../features/postactive/favorite.slice';
+import { PopularBookForm } from '#features/popular-form/popular-form';
 
 interface StarRatingProps {
   rating: number;
@@ -81,6 +82,7 @@ export const FavoriteBook: React.FC<BookProps> = ({ response }) => {
             </PostsWrapper>
           ))
         : 'Постов нет'}
+      <PopularBookForm />
     </>
   );
 };

@@ -11,7 +11,7 @@ import { Title } from '#ui/title/title';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../auth/registration.slice';
+// import { register } from '../auth/registration.slice';
 import { Button3 } from '#ui/button/button3';
 
 export const AccountForm: React.FC = () => {
@@ -27,15 +27,16 @@ export const AccountForm: React.FC = () => {
   const confirmedPassword = useAppSelector(
     ({ signUpForm }) => signUpForm.confirmedPassword
   );
-  const isCompleted = useAppSelector(
-    ({ registration }) => registration.isCompleted
-  );
+  // const isCompleted = useAppSelector(
+  //   ({ registration }) => registration.isCompleted
+  // );
   const cancel = {};
-  useEffect(() => {
-    if (isCompleted) {
-      navigate('/registration');
-    }
-  }, [isCompleted, navigate]);
+  // useEffect(() => {
+  //   if (isCompleted) {
+  //     navigate('/registration');
+  //   }
+  // }, [isCompleted, navigate]);
+  const bur = () => {};
 
   return (
     <RegistrationWrapper>
@@ -98,7 +99,10 @@ export const AccountForm: React.FC = () => {
       <ButtonWrapper>
         <Button
           variant="primary"
-          onClick={() => dispatch(register({ username: name, password }))}
+          onClick={bur}
+          // onClick={() =>
+          //   dispatch(register({ username: name, password, email }))
+          // }
         >
           Save changes
         </Button>

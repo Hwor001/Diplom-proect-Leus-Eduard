@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setEmail, setPassword } from '../sing-up-form/sing-up-form.slice';
 import { Button2 } from '#ui/button/button2';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { setUser } from '../auth/user.slice';
 
 export const SingInForm: React.FC = () => {
   const navigate = useNavigate();
@@ -13,6 +15,22 @@ export const SingInForm: React.FC = () => {
   const password = useAppSelector(({ signUpForm }) => signUpForm.password);
   const handleRegistration = () => {
     // navigate('/success');
+  };
+  const handleLogin = (email: string, password: string) => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then(({ user }) => {
+        console.log(user);
+        dispatch(
+          setUser({
+            email: user.email,
+            id: user.uid,
+            token: user.refreshToken,
+          })
+        );
+        navigate('/MainBookStore');
+      })
+      .catch(() => alert('Invalid user!'));
   };
 
   const ForgotPassword = () => {};
@@ -38,7 +56,7 @@ export const SingInForm: React.FC = () => {
         }
       />
       <Button2 onClick={ForgotPassword}>Forgot password ?</Button2>
-      <Button variant="primary" onClick={handleRegistration}>
+      <Button variant="primary" onClick={() => handleLogin(email, password)}>
         Sing in
       </Button>
     </RegistrationWrapper>

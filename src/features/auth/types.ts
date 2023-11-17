@@ -1,6 +1,7 @@
 export type RegistrationPayload = {
   username: string;
   password: string;
+  email: string;
 };
 
 export interface Post {
@@ -77,8 +78,8 @@ export type Response = {
 };
 
 export type SeachBooks = {
-  error: string;
-  page: string;
-  total: string;
+  error: number;
+  page: number;
+  total: number;
   books: Book[];
 };

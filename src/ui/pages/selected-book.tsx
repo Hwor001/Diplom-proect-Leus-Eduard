@@ -5,13 +5,19 @@ import Header from '#ui/header/header';
 import { SelectedBookForm } from '#features/selected-book/selected-book-form';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Response } from '#features/auth/types';
+import { Response, SeachBooks } from '#features/auth/types';
 
 interface Props {
   handleSearch: (searchText: string) => void;
+  title: string;
+  post: SeachBooks;
 }
 
-export const SelectedBook: React.FC<Props> = ({ handleSearch }) => {
+export const SelectedBook: React.FC<Props> = ({
+  handleSearch,
+  title,
+  post,
+}) => {
   const { isbn13 } = useParams();
   const [book, setBook] = useState<Response | null>(null);
 
@@ -26,10 +32,10 @@ export const SelectedBook: React.FC<Props> = ({ handleSearch }) => {
   }
   return (
     <MainTemplate
-      header={<Header handleSearch={handleSearch} />}
+      header={<Header handleSearch={handleSearch} post={post} />}
       backLink={<BackLink />}
       title={<Title2>{book.title}</Title2>}
-      body={<SelectedBookForm response={book} />}
+      body={<SelectedBookForm response={book} title={book.title} />}
     />
   );
 };

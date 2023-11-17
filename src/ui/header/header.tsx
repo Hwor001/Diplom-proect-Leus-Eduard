@@ -7,12 +7,15 @@ import { Button6 } from '#ui/button/button6';
 import BookstoreWord from '../../svg/Bookstore.svg';
 // import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { DropDown } from '#ui/post/drop-down-post';
+import { SeachBooks } from '#features/auth/types';
 
 interface Props {
   handleSearch: (searchText: string) => void;
+  post: SeachBooks;
 }
 
-export const Header: React.FC<Props> = ({ handleSearch }) => {
+export const Header: React.FC<Props> = ({ handleSearch, post }) => {
   // const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
   const [page, setPage] = useState(1);
@@ -41,6 +44,9 @@ export const Header: React.FC<Props> = ({ handleSearch }) => {
           <FontAwesomeIcon icon={faSearch} onClick={Search} />
         </Link>
       </SeachWrapper>
+      {inputValue.trim() !== '' && (
+        <DropDown searchResultsText={inputValue} post={post} />
+      )}
       <FontWrapper>
         <Link to={`/Favorite`}>
           <FontAwesomeIcon icon={faHeart} onClick={Heart} />

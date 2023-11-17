@@ -6,14 +6,19 @@ import { MainBookStoreForm } from '#features/main-blog/maim-bookstore-form';
 import { useAppDispatch, useAppSelector } from '#hooks';
 import { getAllposts } from '../../features/postactive/all-post.slice';
 import { useEffect } from 'react';
-import { Response } from '#features/auth/types';
+import { Response, SeachBooks } from '#features/auth/types';
 
 interface Props {
   handleSearch: (searchText: string) => void;
   response: Response;
+  post: SeachBooks;
 }
 
-export const MainBookStore: React.FC<Props> = ({ handleSearch, response }) => {
+export const MainBookStore: React.FC<Props> = ({
+  handleSearch,
+  response,
+  post,
+}) => {
   const dispatch = useAppDispatch();
   const { posts, isLoading } = useAppSelector(({ allPosts }) => allPosts);
   useEffect(() => {
@@ -28,7 +33,7 @@ export const MainBookStore: React.FC<Props> = ({ handleSearch, response }) => {
   }
   return (
     <MainTemplate
-      header={<Header handleSearch={handleSearch} />}
+      header={<Header handleSearch={handleSearch} post={post} />}
       backLink={<BackLink />}
       title={<Title2>New Releases Books</Title2>}
       body={<MainBookStoreForm posts={posts} response={response} />}

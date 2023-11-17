@@ -23,6 +23,7 @@ import {
 } from '../../features/postactive/basket.slice';
 import { RootState, store } from '../../store1';
 import { setQuantity } from '../../features/postactive/quantity.slice';
+import { SimilarBoookForm } from '#features/similar-books-form/similar-books-form';
 
 interface StarRatingProps {
   rating: number;
@@ -48,6 +49,7 @@ const StarRating: React.FC<StarRatingProps> = ({ rating }) => {
 
 interface BookProps {
   response: Response;
+  title: string;
 }
 
 export const SelectedBookForm: React.FC<BookProps> = ({ response }) => {
@@ -150,6 +152,7 @@ export const SelectedBookForm: React.FC<BookProps> = ({ response }) => {
             <FontAwesomeIcon onClick={more} icon={faEllipsis} />
           </FontsWrapper>
           <NewsLetter />
+          <SimilarBoookForm title={response.title} />
         </>
       </MainBookStoreWrapper>
     </SelectedBookWrapper>

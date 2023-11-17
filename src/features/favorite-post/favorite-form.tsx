@@ -1,8 +1,5 @@
 import { styled } from 'styled-components';
-import { NewsLetter } from '#features/newsletter/newsletter-form';
 import { Response } from '#features/auth/types';
-import { RootState } from '../../store1';
-import { useSelector, useDispatch } from 'react-redux';
 import { FavoriteBook } from '#ui/post/post-favorite';
 
 interface BookProps {
@@ -15,7 +12,6 @@ export const FavoriteForm: React.FC<BookProps> = ({ response }) => {
       <FavoriteWrapper>
         <FavoriteBook response={response}></FavoriteBook>
       </FavoriteWrapper>
-      <NewsLetter />
     </AllWrapper>
   );
 };

@@ -8,16 +8,32 @@ import './App.css';
 // import { useAppSelector } from '#hooks';
 // import styled from 'styled-components';
 import { Link, Route, Routes } from 'react-router-dom';
-import { SearchBook } from '#ui/pages/seach-book';
+import { SearchBook } from '#ui/pages/search-book';
 import { useState } from 'react';
 import { Favorite } from '#ui/pages/favorite';
-import { Response } from '#features/auth/types';
+import { Response, SeachBooks } from '#features/auth/types';
 import { Basket } from '#ui/pages/basket';
 
 export function Root() {
   const [searchText, setSearchText] = useState('');
   const handleSearch = (inputValue: string) => {
     setSearchText(inputValue);
+  };
+
+  const yourPostObject: SeachBooks = {
+    error: 0,
+    page: 0,
+    total: 0,
+    books: [
+      {
+        title: '',
+        subtitle: '',
+        isbn13: 0,
+        price: '',
+        image: null,
+        url: null,
+      },
+    ],
   };
 
   const yourResponseObject: Response = {
@@ -48,7 +64,12 @@ export function Root() {
           />
           <Route
             path="/PageSingInAndUp"
-            element={<PageSingInAndUp handleSearch={handleSearch} />}
+            element={
+              <PageSingInAndUp
+                handleSearch={handleSearch}
+                post={yourPostObject}
+              />
+            }
           />
           <Route
             path="/MainBookStore"
@@ -56,12 +77,19 @@ export function Root() {
               <MainBookStore
                 handleSearch={handleSearch}
                 response={yourResponseObject}
+                post={yourPostObject}
               />
             }
           />
           <Route
             path="/books/:isbn13"
-            element={<SelectedBook handleSearch={handleSearch} />}
+            element={
+              <SelectedBook
+                handleSearch={handleSearch}
+                title={yourResponseObject.title}
+                post={yourPostObject}
+              />
+            }
           />
           <Route
             path="/Favorite"
@@ -69,6 +97,7 @@ export function Root() {
               <Favorite
                 handleSearch={handleSearch}
                 response={yourResponseObject}
+                post={yourPostObject}
               />
             }
           />
@@ -78,6 +107,7 @@ export function Root() {
               <SearchBook
                 handleSearch={handleSearch}
                 searchResultsText={searchText}
+                post={yourPostObject}
               />
             }
           ></Route>
@@ -87,19 +117,21 @@ export function Root() {
               <Basket
                 handleSearch={handleSearch}
                 response={yourResponseObject}
+                post={yourPostObject}
               />
             }
           ></Route>
           <Route
             path="/Account"
-            element={<Account handleSearch={handleSearch} />}
+            element={
+              <Account handleSearch={handleSearch} post={yourPostObject} />
+            }
           ></Route>
         </Route>
       </Routes>
       {/* <PageSingInAndUp></PageSingInAndUp>
       <ResetPassword></ResetPassword>
-      <NewPassword></NewPassword>
-      <Account></Account> */}
+      <NewPassword></NewPassword>*/}
     </div>
   );
 }

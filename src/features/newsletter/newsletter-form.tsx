@@ -51,7 +51,7 @@ const InputButttonWrapper = styled.div`
   display: flex;
 `;
 
-const SubscribeWrapper = styled.p`
+const SubscribeWrapper = styled.h2`
   font-family: 'Bebas Neue';
   font-weight: 700;
   font-size: 40px;

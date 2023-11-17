@@ -7,32 +7,37 @@ import {
   setPassword,
   setConfirmedPassword,
 } from './sing-up-form.slice';
+import { setUser } from '../auth/user.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../auth/registration.slice';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 export const SingUpForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const nameInputRef = useRef<HTMLInputElement | null>(null);
-  const emailInputRef = useRef<HTMLInputElement | null>(null);
-  const passwordInputRef = useRef<HTMLInputElement | null>(null);
-  const confirmedPasswordInputRef = useRef<HTMLInputElement | null>(null);
   const name = useAppSelector(({ signUpForm }) => signUpForm.name);
   const email = useAppSelector(({ signUpForm }) => signUpForm.email);
   const password = useAppSelector(({ signUpForm }) => signUpForm.password);
   const confirmedPassword = useAppSelector(
     ({ signUpForm }) => signUpForm.confirmedPassword
   );
-  const isCompleted = useAppSelector(
-    ({ registration }) => registration.isCompleted
-  );
-  useEffect(() => {
-    if (isCompleted) {
-      navigate('/registration');
-    }
-  }, [isCompleted, navigate]);
+  const handleRegister = (email: string, password: string) => {
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(({ user }) => {
+        console.log(user);
+        dispatch(
+          setUser({
+            email: user.email,
+            id: user.uid,
+            token: user.refreshToken,
+          })
+        );
+        navigate('/MainBookStore');
+      })
+      .catch(console.error);
+  };
+  const bur = () => {};
 
   return (
     <RegistrationWrapper>
@@ -42,7 +47,6 @@ export const SingUpForm: React.FC = () => {
         inputText="Your name"
         value={name}
         onChange={({ currentTarget }) => dispatch(setName(currentTarget.value))}
-        ref={nameInputRef}
       />
       <Input
         type="email"
@@ -52,7 +56,6 @@ export const SingUpForm: React.FC = () => {
         onChange={({ currentTarget }) =>
           dispatch(setEmail(currentTarget.value))
         }
-        ref={emailInputRef}
       />
       <Input
         type="password"
@@ -62,7 +65,6 @@ export const SingUpForm: React.FC = () => {
         onChange={({ currentTarget }) =>
           dispatch(setPassword(currentTarget.value))
         }
-        ref={passwordInputRef}
       />
       <Input
         type="password"
@@ -72,11 +74,11 @@ export const SingUpForm: React.FC = () => {
         onChange={({ currentTarget }) =>
           dispatch(setConfirmedPassword(currentTarget.value))
         }
-        ref={confirmedPasswordInputRef}
       />
       <Button
         variant="primary"
-        onClick={() => dispatch(register({ username: name, password }))}
+        onClick={() => handleRegister(email, password)}
+        // onClick={() => dispatch(register({ username: name, password, email }))}
       >
         Sign Up
       </Button>

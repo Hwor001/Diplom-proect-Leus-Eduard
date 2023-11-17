@@ -8,7 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../auth/registration.slice';
+// import { register } from '../auth/registration.slice';
 import { Title } from '#ui/title/title';
 
 export const NewPasswordForm: React.FC = () => {
@@ -21,14 +21,16 @@ export const NewPasswordForm: React.FC = () => {
   const confirmedPassword = useAppSelector(
     ({ signUpForm }) => signUpForm.confirmedPassword
   );
-  const isCompleted = useAppSelector(
-    ({ registration }) => registration.isCompleted
-  );
-  useEffect(() => {
-    if (isCompleted) {
-      navigate('/registration');
-    }
-  }, [isCompleted, navigate]);
+  // const isCompleted = useAppSelector(
+  //   ({ registration }) => registration.isCompleted
+  // );
+  // useEffect(() => {
+  //   if (isCompleted) {
+  //     navigate('/registration');
+  //   }
+  // }, [isCompleted, navigate]);
+  // const bur = () => {};
+  const bur = () => {};
 
   return (
     <RegistrationWrapper>
@@ -55,7 +57,8 @@ export const NewPasswordForm: React.FC = () => {
       />
       <Button
         variant="primary"
-        onClick={() => dispatch(register({ username: name, password }))}
+        onClick={bur}
+        // onClick={() => dispatch(register({ username: name, password, email }))}
       >
         set password
       </Button>
