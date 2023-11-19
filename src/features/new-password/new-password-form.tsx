@@ -6,31 +6,55 @@ import {
   setConfirmedPassword,
 } from '../sing-up-form/sing-up-form.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { register } from '../auth/registration.slice';
 import { Title } from '#ui/title/title';
+import { getAuth, updatePassword } from 'firebase/auth';
+
+// const generateRandomPassword = (): string => {
+//   const characters =
+//     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//   const passwordLength = 8;
+
+//   let password = '';
+//   for (let i = 0; i < passwordLength; i++) {
+//     const randomIndex = Math.floor(Math.random() * characters.length);
+//     password += characters.charAt(randomIndex);
+//   }
+
+//   return password;
+// };
 
 export const NewPasswordForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const passwordInputRef = useRef<HTMLInputElement | null>(null);
-  const confirmedPasswordInputRef = useRef<HTMLInputElement | null>(null);
-  const name = useAppSelector(({ signUpForm }) => signUpForm.name);
   const password = useAppSelector(({ signUpForm }) => signUpForm.password);
   const confirmedPassword = useAppSelector(
     ({ signUpForm }) => signUpForm.confirmedPassword
   );
-  // const isCompleted = useAppSelector(
-  //   ({ registration }) => registration.isCompleted
-  // );
-  // useEffect(() => {
-  //   if (isCompleted) {
-  //     navigate('/registration');
-  //   }
-  // }, [isCompleted, navigate]);
-  // const bur = () => {};
-  const bur = () => {};
+
+  const newPassword = () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      if (password === confirmedPassword) {
+        updatePassword(user, password)
+          .then(() => {
+            console.log('Password updated successfully.');
+            navigate('/MainBookStore');
+          })
+          .catch((error) => {
+            console.error('Error updating password:', error);
+          });
+      } else {
+        console.error('Passwords do not match');
+      }
+    } else {
+      console.error('No authenticated user. Please sign in.');
+      // Дополнительные действия, например, перенаправление пользователя на страницу входа
+    }
+  };
 
   return (
     <RegistrationWrapper>
@@ -43,7 +67,6 @@ export const NewPasswordForm: React.FC = () => {
         onChange={({ currentTarget }) =>
           dispatch(setPassword(currentTarget.value))
         }
-        ref={passwordInputRef}
       />
       <Input
         type="password"
@@ -53,13 +76,8 @@ export const NewPasswordForm: React.FC = () => {
         onChange={({ currentTarget }) =>
           dispatch(setConfirmedPassword(currentTarget.value))
         }
-        ref={confirmedPasswordInputRef}
       />
-      <Button
-        variant="primary"
-        onClick={bur}
-        // onClick={() => dispatch(register({ username: name, password, email }))}
-      >
+      <Button variant="primary" onClick={newPassword}>
         set password
       </Button>
     </RegistrationWrapper>

@@ -38,7 +38,6 @@ const LabelText = styled.div`
   font-size: 16px;
   line-height: 32px;
   text-align: start;
-  position: relative;
   margin-bottom: 8px;
   left: 1px;
 `;

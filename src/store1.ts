@@ -9,7 +9,6 @@ import favoriteBooksReducer from '#features/postactive/favorite.slice';
 import basketReducer from '#features/postactive/basket.slice';
 import basketQualityReducer from '#features/postactive/quantity.slice';
 import authReducer from '#features/postactive/similar.slice';
-import userReducer from '#features/auth/user.slice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -20,7 +19,6 @@ const rootReducer = combineReducers({
   Post: postReducer,
   signUpForm: signUpFormReducer,
   basketQuantity: basketQualityReducer,
-  user: userReducer,
   auth: authReducer,
 });
 

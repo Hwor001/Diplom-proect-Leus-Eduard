@@ -6,37 +6,64 @@ import {
   setEmail,
   setPassword,
   setConfirmedPassword,
+  setNewPassword,
 } from '../sing-up-form/sing-up-form.slice';
 import { Title } from '#ui/title/title';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { register } from '../auth/registration.slice';
 import { Button3 } from '#ui/button/button3';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  updatePassword,
+} from 'firebase/auth';
 
 export const AccountForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const nameInputRef = useRef<HTMLInputElement | null>(null);
-  const emailInputRef = useRef<HTMLInputElement | null>(null);
-  const passwordInputRef = useRef<HTMLInputElement | null>(null);
-  const confirmedPasswordInputRef = useRef<HTMLInputElement | null>(null);
   const name = useAppSelector(({ signUpForm }) => signUpForm.name);
   const email = useAppSelector(({ signUpForm }) => signUpForm.email);
-  const password = useAppSelector(({ signUpForm }) => signUpForm.password);
+  const oldPassword = useAppSelector(({ signUpForm }) => signUpForm.password);
+  const newPasswordValue = useAppSelector(
+    ({ signUpForm }) => signUpForm.newPassword
+  );
   const confirmedPassword = useAppSelector(
     ({ signUpForm }) => signUpForm.confirmedPassword
   );
-  // const isCompleted = useAppSelector(
-  //   ({ registration }) => registration.isCompleted
-  // );
+
   const cancel = {};
-  // useEffect(() => {
-  //   if (isCompleted) {
-  //     navigate('/registration');
-  //   }
-  // }, [isCompleted, navigate]);
-  const bur = () => {};
+
+  const newPasswordUpdate = () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      console.error('No authenticated user.');
+      return;
+    }
+
+    if (newPasswordValue !== confirmedPassword) {
+      console.error('New password and confirm password do not match.');
+      return;
+    }
+
+    const newPassword = newPasswordValue;
+
+    signInWithEmailAndPassword(auth, email, oldPassword)
+      .then(() => {
+        updatePassword(user, newPassword)
+          .then(() => {
+            console.log('Password updated successfully.');
+            navigate('/MainBookStore');
+          })
+          .catch((error) => {
+            console.error('Error updating password:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error signing in:', error);
+      });
+  };
 
   return (
     <RegistrationWrapper>
@@ -50,7 +77,6 @@ export const AccountForm: React.FC = () => {
           onChange={({ currentTarget }) =>
             dispatch(setName(currentTarget.value))
           }
-          ref={nameInputRef}
         />
         <Input
           type="email"
@@ -60,30 +86,27 @@ export const AccountForm: React.FC = () => {
           onChange={({ currentTarget }) =>
             dispatch(setEmail(currentTarget.value))
           }
-          ref={emailInputRef}
         />
       </NameEmailWrapper>
       <Title>password</Title>
       <Input
         type="password"
-        labelText="Password"
+        labelText="Old password"
         inputText="Your password"
-        value={password}
+        value={oldPassword}
         onChange={({ currentTarget }) =>
           dispatch(setPassword(currentTarget.value))
         }
-        ref={passwordInputRef}
       />
       <PasswordWrapper>
         <Input
           type="password"
           labelText="New password"
           inputText="Your password"
-          value={password}
+          value={newPasswordValue}
           onChange={({ currentTarget }) =>
-            dispatch(setPassword(currentTarget.value))
+            dispatch(setNewPassword(currentTarget.value))
           }
-          ref={passwordInputRef}
         />
         <Input
           type="password"
@@ -93,17 +116,10 @@ export const AccountForm: React.FC = () => {
           onChange={({ currentTarget }) =>
             dispatch(setConfirmedPassword(currentTarget.value))
           }
-          ref={confirmedPasswordInputRef}
         />
       </PasswordWrapper>
       <ButtonWrapper>
-        <Button
-          variant="primary"
-          onClick={bur}
-          // onClick={() =>
-          //   dispatch(register({ username: name, password, email }))
-          // }
-        >
+        <Button variant="primary" onClick={newPasswordUpdate}>
           Save changes
         </Button>
         <Button3 variant="primary" onClick={() => cancel}>

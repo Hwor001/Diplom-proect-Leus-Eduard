@@ -1,9 +1,3 @@
-export type RegistrationPayload = {
-  username: string;
-  password: string;
-  email: string;
-};
-
 export interface Post {
   title: string;
   subtitle: string;

@@ -7,10 +7,15 @@ import {
   setPassword,
   setConfirmedPassword,
 } from './sing-up-form.slice';
-import { setUser } from '../auth/user.slice';
+// import { setUser } from '../auth/user.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
+// import { setUserName } from '../../features/auth/user.slice';
 
 export const SingUpForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,23 +26,23 @@ export const SingUpForm: React.FC = () => {
   const confirmedPassword = useAppSelector(
     ({ signUpForm }) => signUpForm.confirmedPassword
   );
-  const handleRegister = (email: string, password: string) => {
+  const handleRegister = async (email: string, password: string) => {
     const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        console.log(user);
-        dispatch(
-          setUser({
-            email: user.email,
-            id: user.uid,
-            token: user.refreshToken,
-          })
-        );
-        navigate('/MainBookStore');
-      })
-      .catch(console.error);
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(user, {
+        displayName: name,
+      });
+      console.log(user);
+      navigate('/MainBookStore');
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const bur = () => {};
 
   return (
     <RegistrationWrapper>
@@ -75,11 +80,7 @@ export const SingUpForm: React.FC = () => {
           dispatch(setConfirmedPassword(currentTarget.value))
         }
       />
-      <Button
-        variant="primary"
-        onClick={() => handleRegister(email, password)}
-        // onClick={() => dispatch(register({ username: name, password, email }))}
-      >
+      <Button variant="primary" onClick={() => handleRegister(email, password)}>
         Sign Up
       </Button>
     </RegistrationWrapper>

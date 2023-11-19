@@ -1,8 +1,8 @@
 import { Account } from '#ui/pages/account';
 import { MainBookStore } from '#ui/pages/main-bookstore';
-// import { NewPassword } from '#ui/pages/new-password';
+import { NewPassword } from '#ui/pages/new-password';
 import { PageSingInAndUp } from '#ui/pages/page-sing-in-and-up';
-// import { ResetPassword } from '#ui/pages/reset-password';
+import { ResetPassword } from '#ui/pages/reset-password';
 import { SelectedBook } from '#ui/pages/selected-book';
 import './App.css';
 // import { useAppSelector } from '#hooks';
@@ -54,6 +54,7 @@ export function Root() {
     language: '',
     pdf: null,
   };
+
   return (
     <div className={`App `}>
       <Routes>
@@ -127,11 +128,23 @@ export function Root() {
               <Account handleSearch={handleSearch} post={yourPostObject} />
             }
           ></Route>
+          <Route
+            path="/NewPassword"
+            element={
+              <NewPassword handleSearch={handleSearch} post={yourPostObject} />
+            }
+          ></Route>
+          <Route
+            path="/ResetPassword"
+            element={
+              <ResetPassword
+                handleSearch={handleSearch}
+                post={yourPostObject}
+              />
+            }
+          ></Route>
         </Route>
       </Routes>
-      {/* <PageSingInAndUp></PageSingInAndUp>
-      <ResetPassword></ResetPassword>
-      <NewPassword></NewPassword>*/}
     </div>
   );
 }

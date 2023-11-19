@@ -6,6 +6,7 @@ const singUpFormSlice = createSlice({
     name: '',
     email: '',
     password: '',
+    newPassword: '',
     confirmedPassword: '',
   },
   reducers: {
@@ -18,6 +19,9 @@ const singUpFormSlice = createSlice({
     setPassword(state, action: { payload: (typeof state)['password'] }) {
       state.password = action.payload;
     },
+    setNewPassword(state, action: { payload: (typeof state)['newPassword'] }) {
+      state.newPassword = action.payload;
+    },
     setConfirmedPassword(
       state,
       action: { payload: (typeof state)['confirmedPassword'] }
@@ -28,6 +32,12 @@ const singUpFormSlice = createSlice({
 });
 
 export const {
-  actions: { setName, setEmail, setPassword, setConfirmedPassword },
+  actions: {
+    setName,
+    setEmail,
+    setPassword,
+    setConfirmedPassword,
+    setNewPassword,
+  },
   reducer: signUpFormReducer,
 } = singUpFormSlice;
