@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface QuantityState {
-  [isbn13: number]: number;
+  [isbn13: string]: number;
 }
 
 const initialState: QuantityState = {};

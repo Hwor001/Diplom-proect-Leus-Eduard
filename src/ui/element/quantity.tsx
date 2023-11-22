@@ -11,7 +11,7 @@ import {
 export const Quantity: React.FC<{ isbn13: number }> = ({ isbn13 }) => {
   const dispatch = useDispatch();
   const quantity = useSelector(
-    (state: RootState) => state.basketQuantity[isbn13] || 0
+    (state: RootState) => state.basketQuantity[isbn13] || ''
   );
 
   return (

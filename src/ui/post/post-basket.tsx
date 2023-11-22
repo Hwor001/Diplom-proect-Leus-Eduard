@@ -1,5 +1,5 @@
 import { Response } from '#features/auth/types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
@@ -15,9 +15,8 @@ interface BookProps {
 
 export const BasketBook: React.FC<BookProps> = () => {
   const dispatch = useDispatch();
-  const items = useSelector(
-    (state: RootState) => state.basketBooks.itemsInCart
-  );
+  const navigate = useNavigate();
+  const item = useSelector((state: RootState) => state.basketBooks.itemsInCart);
   const basketQuantity = useSelector(
     (state: RootState) => state.basketQuantity
   );
@@ -26,9 +25,11 @@ export const BasketBook: React.FC<BookProps> = () => {
     console.log('After dispatch:', store.getState());
   };
 
-  const check = () => {};
+  const check = () => {
+    navigate('/Check');
+  };
 
-  const totalSum = items.reduce(
+  const totalSum = item.reduce(
     (sum, element) =>
       sum +
       parseFloat(element.price.replace(/\$/g, '')) *
@@ -41,8 +42,8 @@ export const BasketBook: React.FC<BookProps> = () => {
 
   return (
     <>
-      {items.length > 0
-        ? items.map((element: Response) => (
+      {item.length > 0
+        ? item.map((element: Response) => (
             <PostsWrapper key={element.isbn13}>
               <ImgInfoWrapper>
                 <PostImg>
@@ -97,7 +98,10 @@ export const BasketBook: React.FC<BookProps> = () => {
           </SumTotalWraper>
         </FormWrapper>
         <ButtonWrapper>
-          <Button variant="primary" onClick={check}>
+          <Button
+            variant="primary"
+            onClick={item.length > 0 ? check : () => {}}
+          >
             check out
           </Button>
         </ButtonWrapper>

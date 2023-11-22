@@ -4,10 +4,10 @@ import {
   faSearch,
   faBasketShopping,
   faRightFromBracket,
+  faUser as fasUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart, faUser } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
-import { Button6 } from '#ui/button/button6';
 import BookstoreWord from '../../svg/Bookstore.svg';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -15,6 +15,9 @@ import { DropDown } from '#ui/post/drop-down-post';
 import { SeachBooks } from '#features/auth/types';
 import { auth } from '../../firebase';
 import { getAuth, signOut } from 'firebase/auth';
+import { faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, store } from '../../store1';
 
 interface Props {
   handleSearch: (searchText: string) => void;
@@ -23,7 +26,15 @@ interface Props {
 
 export const Header: React.FC<Props> = ({ handleSearch, post }) => {
   const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState('');
+  const [page, setPage] = useState(1);
+  const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
   const [userName, setUserName] = useState('');
+  const items = useSelector(
+    (state: RootState) => state.favoriteBooks.favorites
+  );
+  const item = useSelector((state: RootState) => state.basketBooks.itemsInCart);
+
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
@@ -34,6 +45,7 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
       }
     });
   }, []);
+
   const signOutUser = async () => {
     try {
       const auth = getAuth();
@@ -43,9 +55,7 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
       console.error('Error signing out:', error);
     }
   };
-  const [inputValue, setInputValue] = useState('');
-  const [page, setPage] = useState(1);
-  const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
+
   const Bookstore = () => {
     navigate('/MainBookStore');
   };
@@ -53,17 +63,19 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
     console.log('seach', inputValue);
     handleSearch(inputValue);
   };
-  const Heart = () => {};
-  const Shopping = () => {};
   const User = () => {
     setIsUserPopupOpen(!isUserPopupOpen);
   };
 
   return (
     <HeaderWrapper>
-      <Button6 onClick={Bookstore}>
-        <img src={BookstoreWord} alt="Bookstore" />
-      </Button6>
+      <ImgWrapper>
+        <img
+          src={BookstoreWord}
+          alt="Bookstore"
+          onClick={userName !== '' ? Bookstore : undefined}
+        />
+      </ImgWrapper>
       <SeachWrapper>
         <input
           className="search-text"
@@ -72,21 +84,27 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <Link to={`/search/${inputValue}/${page}`}>
+        <Link to={userName !== '' ? `/search/${inputValue}/${page}` : '#'}>
           <FontAwesomeIcon icon={faSearch} onClick={Search} />
         </Link>
       </SeachWrapper>
-      {inputValue.trim() !== '' && (
+      {userName !== '' && inputValue.trim() !== '' && (
         <DropDown searchResultsText={inputValue} post={post} />
       )}
       <FontWrapper>
-        <Link to={`/Favorite`}>
-          <FontAwesomeIcon icon={faHeart} onClick={Heart} />
+        <Link to={userName !== '' ? `/Favorite` : '#'}>
+          <FontAwesomeIcon icon={items.length > 0 ? fasHeart : faHeart} />
         </Link>
-        <Link to={`/Basket`}>
-          <FontAwesomeIcon icon={faBasketShopping} onClick={Shopping} />
+        <Link to={userName !== '' ? `/Basket` : '#'}>
+          <FontAwesomeIcon
+            icon={faBasketShopping}
+            style={{ color: item.length > 0 ? 'green' : 'black' }}
+          />
         </Link>
-        <FontAwesomeIcon icon={faUser} onClick={User} />
+        <FontAwesomeIcon
+          icon={userName === '' ? faUser : fasUser}
+          onClick={userName !== '' ? User : undefined}
+        />
         {isUserPopupOpen && (
           <UserPopup>
             <UserWrapper>
@@ -108,6 +126,15 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
     </HeaderWrapper>
   );
 };
+
+const ImgWrapper = styled.div`
+  margin-top: 38px;
+  margin-left: 15px;
+  cursor: pointer;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+`;
 
 const NameWrapper = styled.div`
   display: flex;

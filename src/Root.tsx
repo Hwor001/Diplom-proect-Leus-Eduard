@@ -7,19 +7,21 @@ import { SelectedBook } from '#ui/pages/selected-book';
 import './App.css';
 // import { useAppSelector } from '#hooks';
 // import styled from 'styled-components';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { SearchBook } from '#ui/pages/search-book';
 import { useState } from 'react';
 import { Favorite } from '#ui/pages/favorite';
 import { Response, SeachBooks } from '#features/auth/types';
 import { Basket } from '#ui/pages/basket';
+import { Check } from '#features/newsletter/cheack';
+import { Subscribe } from '#ui/pages/subscribToNewsletter';
 
 export function Root() {
   const [searchText, setSearchText] = useState('');
   const handleSearch = (inputValue: string) => {
     setSearchText(inputValue);
   };
-
+  const emptyFavPosts = {};
   const yourPostObject: SeachBooks = {
     error: 0,
     page: 0,
@@ -53,97 +55,106 @@ export function Root() {
     url: null,
     language: '',
     pdf: null,
+    format: '',
   };
 
   return (
     <div className={`App `}>
       <Routes>
-        <Route path="/">
-          <Route
-            index
-            element={<Link to="/PageSingInAndUp">Go to sing up</Link>}
-          />
-          <Route
-            path="/PageSingInAndUp"
-            element={
-              <PageSingInAndUp
-                handleSearch={handleSearch}
-                post={yourPostObject}
-              />
-            }
-          />
-          <Route
-            path="/MainBookStore"
-            element={
-              <MainBookStore
-                handleSearch={handleSearch}
-                response={yourResponseObject}
-                post={yourPostObject}
-              />
-            }
-          />
-          <Route
-            path="/books/:isbn13"
-            element={
-              <SelectedBook
-                handleSearch={handleSearch}
-                title={yourResponseObject.title}
-                post={yourPostObject}
-              />
-            }
-          />
-          <Route
-            path="/Favorite"
-            element={
-              <Favorite
-                handleSearch={handleSearch}
-                response={yourResponseObject}
-                post={yourPostObject}
-              />
-            }
-          />
-          <Route
-            path="/search/:searchResultsText/:page"
-            element={
-              <SearchBook
-                handleSearch={handleSearch}
-                searchResultsText={searchText}
-                post={yourPostObject}
-              />
-            }
-          ></Route>
-          <Route
-            path="/Basket"
-            element={
-              <Basket
-                handleSearch={handleSearch}
-                response={yourResponseObject}
-                post={yourPostObject}
-              />
-            }
-          ></Route>
-          <Route
-            path="/Account"
-            element={
-              <Account handleSearch={handleSearch} post={yourPostObject} />
-            }
-          ></Route>
-          <Route
-            path="/NewPassword"
-            element={
-              <NewPassword handleSearch={handleSearch} post={yourPostObject} />
-            }
-          ></Route>
-          <Route
-            path="/ResetPassword"
-            element={
-              <ResetPassword
-                handleSearch={handleSearch}
-                post={yourPostObject}
-              />
-            }
-          ></Route>
-        </Route>
+        <Route
+          path="/PageSingInAndUp"
+          element={
+            <PageSingInAndUp
+              handleSearch={handleSearch}
+              post={yourPostObject}
+            />
+          }
+        />
+        <Route
+          path="/MainBookStore"
+          element={
+            <MainBookStore
+              handleSearch={handleSearch}
+              response={yourResponseObject}
+              post={yourPostObject}
+            />
+          }
+        />
+        <Route
+          path="/Subscribe"
+          element={
+            <Subscribe handleSearch={handleSearch} post={yourPostObject} />
+          }
+        />
+        <Route
+          path="/books/:isbn13"
+          element={
+            <SelectedBook
+              handleSearch={handleSearch}
+              post={yourPostObject}
+              title={yourResponseObject.title}
+            />
+          }
+        />
+        <Route
+          path="/Favorite"
+          element={
+            <Favorite
+              handleSearch={handleSearch}
+              response={yourResponseObject}
+              post={yourPostObject}
+            />
+          }
+        />
+        <Route
+          path="/search/:searchResultsText/:page"
+          element={
+            <SearchBook
+              handleSearch={handleSearch}
+              searchResultsText={searchText}
+              post={yourPostObject}
+            />
+          }
+        />
+        <Route
+          path="/Basket"
+          element={
+            <Basket
+              handleSearch={handleSearch}
+              response={yourResponseObject}
+              post={yourPostObject}
+            />
+          }
+        />
+        <Route
+          path="/Check"
+          element={
+            <Check
+              handleSearch={handleSearch}
+              response={yourResponseObject}
+              post={yourPostObject}
+            />
+          }
+        />
+        <Route
+          path="/Account"
+          element={
+            <Account handleSearch={handleSearch} post={yourPostObject} />
+          }
+        />
+        <Route
+          path="/NewPassword"
+          element={
+            <NewPassword handleSearch={handleSearch} post={yourPostObject} />
+          }
+        />
+        <Route
+          path="/ResetPassword"
+          element={
+            <ResetPassword handleSearch={handleSearch} post={yourPostObject} />
+          }
+        />
+        <Route path="/" element={<Navigate to="/PageSingInAndUp" />} />
       </Routes>
     </div>
   );

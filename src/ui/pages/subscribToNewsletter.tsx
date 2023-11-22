@@ -1,6 +1,7 @@
-import { TabsActive } from '#features/tabs-active/tabs-active';
-import Header from '#ui/header/header';
 import { MainTemplate } from '#ui/templates/main-template';
+import { BackLink } from '../../features/back-link/back-link';
+import { Title2 } from '#ui/title/title2';
+import Header from '#ui/header/header';
 import { SeachBooks } from '#features/auth/types';
 
 interface Props {
@@ -8,11 +9,12 @@ interface Props {
   post: SeachBooks;
 }
 
-export const PageSingInAndUp: React.FC<Props> = ({ handleSearch, post }) => {
+export const Subscribe: React.FC<Props> = ({ handleSearch, post }) => {
   return (
     <MainTemplate
       header={<Header handleSearch={handleSearch} post={post} />}
-      body={<TabsActive />}
+      backLink={<BackLink />}
+      title={<Title2>You have subscribed</Title2>}
     />
   );
 };

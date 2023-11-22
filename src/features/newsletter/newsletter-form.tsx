@@ -3,11 +3,16 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Input } from '#ui/input/input';
 import { setEmail } from '../sing-up-form/sing-up-form.slice';
 import { Button } from '#ui/button/button';
+import { useNavigate } from 'react-router-dom';
 
 export const NewsLetter: React.FC = () => {
   const email = useAppSelector(({ signUpForm }) => signUpForm.email);
   const dispatch = useAppDispatch();
-  const subscribe = {};
+  const navigate = useNavigate();
+  const subscribe = () => {
+    navigate('/Subscribe');
+  };
+  const isEmailValid = email.trim() !== '';
   return (
     <SubscribeToNewsletterWrapper>
       <SubscribeWrapper>Subscribe to Newsletter</SubscribeWrapper>
@@ -25,7 +30,11 @@ export const NewsLetter: React.FC = () => {
           }
         />
         <ButtonWrapper>
-          <Button variant="primary" onClick={() => subscribe}>
+          <Button
+            variant="primary"
+            onClick={subscribe}
+            disabled={!isEmailValid}
+          >
             Subscribe
           </Button>
         </ButtonWrapper>

@@ -68,6 +68,7 @@ export type Response = {
   image: any;
   url: any;
   language: string;
+  format: string;
   pdf: any;
 };
 

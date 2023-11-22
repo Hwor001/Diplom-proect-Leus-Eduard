@@ -4,15 +4,15 @@ import {
   getAllPostsFailure,
   getAllPostsSuccess,
 } from '../postactive/all-post.slice';
-import { allPostsApi } from '../auth/apicopy';
+import { allPostsApi } from '../auth/api';
 import { PostsResponse, Book, Post } from '../auth/types';
 
 export function* getAllPostsSaga() {
   yield takeLatest(getAllposts, function* getAllPostsHandler() {
-    const respose: PostsResponse = yield* call(allPostsApi.getAllPosts);
+    const response: PostsResponse = yield* call(allPostsApi.getAllPosts);
 
-    if (respose) {
-      const mergedPosts = mergePosts(respose.books);
+    if (response) {
+      const mergedPosts = mergePosts(response.books);
       yield put(getAllPostsSuccess({ posts: mergedPosts }));
     } else {
       yield put(getAllPostsFailure({ error: 'Mocked error message' }));

@@ -4,7 +4,7 @@ type Props = {
   header: React.ReactNode;
   backLink?: React.ReactNode;
   title?: React.ReactNode;
-  body: React.ReactNode;
+  body?: React.ReactNode;
   children?: never;
 };
 

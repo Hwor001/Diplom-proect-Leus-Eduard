@@ -10,7 +10,7 @@ export const BasketForm: React.FC<BookProps> = ({ response }) => {
   return (
     <AllWrapper>
       <BasketWrapper>
-        <BasketBook response={response}></BasketBook>
+        <BasketBook response={response} />
       </BasketWrapper>
     </AllWrapper>
   );

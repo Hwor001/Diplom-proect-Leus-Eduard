@@ -9,6 +9,7 @@ import favoriteBooksReducer from '#features/postactive/favorite.slice';
 import basketReducer from '#features/postactive/basket.slice';
 import basketQualityReducer from '#features/postactive/quantity.slice';
 import authReducer from '#features/postactive/similar.slice';
+import favorite2Reducer from '#features/postactive/favorite2.slice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   signUpForm: signUpFormReducer,
   basketQuantity: basketQualityReducer,
   auth: authReducer,
+  favorite: favorite2Reducer,
 });
 
 export const store = configureStore({

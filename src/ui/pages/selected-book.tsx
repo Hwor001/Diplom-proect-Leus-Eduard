@@ -30,6 +30,7 @@ export const SelectedBook: React.FC<Props> = ({
   if (!book) {
     return <div>Loading...</div>;
   }
+
   return (
     <MainTemplate
       header={<Header handleSearch={handleSearch} post={post} />}
