@@ -4,6 +4,8 @@ import Header from '#ui/header/header';
 import { SearchBookForm } from '#features/search/search-book-form';
 import { useState, useEffect } from 'react';
 import { SeachBooks } from '#features/auth/types';
+import { useAppDispatch, useAppSelector } from '#hooks';
+import { getSearchBook } from '#features/postactive/search.slice';
 
 interface Props {
   handleSearch: (searchText: string) => void;
@@ -16,25 +18,37 @@ export const SearchBook: React.FC<Props> = ({
   searchResultsText,
   post,
 }) => {
-  const [books, setBooks] = useState<SeachBooks | null>(null);
+  const dispatch = useAppDispatch();
+  const {
+    data: books,
+    loading,
+    error,
+  } = useAppSelector((state) => state.searchBook) || {
+    data: null,
+    loading: false,
+    error: null,
+  };
   const [page, setPage] = useState<number>(1);
   const [pageCount, setPageCount] = useState<number>(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(
-        `https://api.itbook.store/1.0/search/${searchResultsText}/${page}`
-      );
-      const data: SeachBooks = await response.json();
-      setBooks(data);
-      console.log(data);
-      setPageCount(Math.ceil(data.total / 10));
-    };
-    fetchData();
-  }, [searchResultsText, page]);
+    if (searchResultsText) {
+      dispatch(getSearchBook({ searchText: searchResultsText, page }));
+      const totalPages = Math.ceil(books?.total || 0 / 10);
+      setPageCount(totalPages <= 100 ? totalPages : 100);
+    }
+  }, [dispatch, searchResultsText, page, books?.total]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   if (!books) {
-    return <div>Loading...</div>;
+    return <div>No books found</div>;
   }
 
   const onPageChange = (currentPage: number) => {

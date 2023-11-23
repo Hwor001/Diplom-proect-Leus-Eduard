@@ -10,6 +10,8 @@ import basketReducer from '#features/postactive/basket.slice';
 import basketQualityReducer from '#features/postactive/quantity.slice';
 import authReducer from '#features/postactive/similar.slice';
 import favorite2Reducer from '#features/postactive/favorite2.slice';
+import selecteReducer from '#features/postactive/selected-book.slice';
+import searchReducer from '#features/postactive/search.slice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -22,6 +24,8 @@ const rootReducer = combineReducers({
   basketQuantity: basketQualityReducer,
   auth: authReducer,
   favorite: favorite2Reducer,
+  selected: selecteReducer,
+  searchBook: searchReducer,
 });
 
 export const store = configureStore({

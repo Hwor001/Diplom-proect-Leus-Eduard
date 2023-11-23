@@ -70,7 +70,8 @@ const DropDownWrapper = styled.div`
   position: absolute;
   width: 540px;
   background: #e7e7e7;
-  transform: translate(251px, 80px);
+  transform: translate(-50%, 80px);
+  left: 50.5%;
 `;
 
 const DropDownElement = styled.div`

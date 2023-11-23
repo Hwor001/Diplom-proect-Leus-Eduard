@@ -4,8 +4,10 @@ import { Title2 } from '#ui/title/title2';
 import Header from '#ui/header/header';
 import { SelectedBookForm } from '#features/selected-book/selected-book-form';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { Response, SeachBooks } from '#features/auth/types';
+import { useEffect } from 'react';
+import { SeachBooks } from '#features/auth/types';
+import { useAppDispatch, useAppSelector } from '#hooks';
+import { getBookByIsbn } from '../../features/postactive/selected-book.slice';
 
 interface Props {
   handleSearch: (searchText: string) => void;
@@ -19,16 +21,25 @@ export const SelectedBook: React.FC<Props> = ({
   post,
 }) => {
   const { isbn13 } = useParams();
-  const [book, setBook] = useState<Response | null>(null);
+  const dispatch = useAppDispatch();
+  const { book, isLoading, error } = useAppSelector((state) => state.selected);
 
   useEffect(() => {
-    fetch(`https://api.itbook.store/1.0/books/${isbn13}`)
-      .then((res) => res.json())
-      .then((data: Response) => setBook(data));
-  }, [isbn13]);
+    if (isbn13) {
+      dispatch(getBookByIsbn(isbn13));
+    }
+  }, [dispatch, isbn13]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   if (!book) {
-    return <div>Loading...</div>;
+    return <div>No book found</div>;
   }
 
   return (

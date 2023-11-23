@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 
 type Props = {
   pageCount: number;
@@ -13,6 +14,7 @@ export const PaginationSearch: React.FC<Props> = ({
   currentPage,
   onPageChange,
 }) => {
+  const [inputPage, setInputPage] = useState<string>('');
   const handleIncrement = () => {
     if (currentPage < pageCount) {
       onPageChange(currentPage + 1);
@@ -29,15 +31,14 @@ export const PaginationSearch: React.FC<Props> = ({
     }
   };
 
-  const handleIncrement2 = () => {
-    if (currentPage < pageCount) {
-      onPageChange(currentPage + 10);
-    }
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputPage(event.target.value);
   };
 
-  const handleIncrement3 = () => {
-    if (currentPage < pageCount) {
-      onPageChange(currentPage - 10);
+  const handleGoToPage = () => {
+    const page = parseInt(inputPage, 10);
+    if (!isNaN(page) && page >= 1 && page <= pageCount) {
+      onPageChange(page);
     }
   };
 
@@ -51,16 +52,24 @@ export const PaginationSearch: React.FC<Props> = ({
         {currentPage !== 1 ? (
           <JumpButton onClick={() => onPageChange(1)}>1</JumpButton>
         ) : null}
-        {currentPage > 2 ? (
-          <JumpButton onClick={handleIncrement3}>...</JumpButton>
-        ) : null}
+        {currentPage > 2 ? <JumpButton>...</JumpButton> : null}
         <JumpButton>{currentPage}</JumpButton>
-        {pageCount - currentPage > 1 ? (
-          <JumpButton onClick={handleIncrement2}>...</JumpButton>
-        ) : null}
+        {pageCount - currentPage > 1 ? <JumpButton>...</JumpButton> : null}
         {currentPage !== pageCount ? (
           <JumpButton onClick={handlePageChange}>{pageCount}</JumpButton>
         ) : null}
+        {pageCount > 10 && (
+          <JumperDiv>
+            <StyledInput
+              type="number"
+              value={inputPage}
+              onChange={handleInputChange}
+              min="1"
+              max={pageCount.toString()}
+            />
+            <StyledButton onClick={handleGoToPage}>Go</StyledButton>
+          </JumperDiv>
+        )}
       </JumperDiv>
       <Right>
         <Text>Next</Text>
@@ -91,7 +100,13 @@ const Left = styled.div`
 `;
 
 const JumperDiv = styled.div`
+  display: flex;
   color: var(--text-primary-color);
+  height: 25px;
+
+  & JumperDiv {
+    transform: translateY(15px);
+  }
 `;
 
 const JumpButton = styled.button`
@@ -125,4 +140,12 @@ const StyledArrow = styled(FontAwesomeIcon)`
   position: relative;
   top: 5px;
   cursor: pointer;
+`;
+
+const StyledInput = styled.input`
+  transform: translateY(13px);
+`;
+
+const StyledButton = styled.button`
+  transform: translateY(13px);
 `;

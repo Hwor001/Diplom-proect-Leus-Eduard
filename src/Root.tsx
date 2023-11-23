@@ -21,7 +21,7 @@ export function Root() {
   const handleSearch = (inputValue: string) => {
     setSearchText(inputValue);
   };
-  const emptyFavPosts = {};
+
   const yourPostObject: SeachBooks = {
     error: 0,
     page: 0,
