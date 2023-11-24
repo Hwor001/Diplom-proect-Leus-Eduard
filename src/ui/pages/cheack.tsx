@@ -1,5 +1,5 @@
 import { MainTemplate } from '#ui/templates/main-template';
-import { Title2 } from '#ui/title/title2';
+import { Title } from '#ui/title/title';
 import Header from '#ui/header/header';
 import { Response, SeachBooks } from '#features/auth/types';
 import { CheckForm } from '#features/check/check-form';
@@ -14,7 +14,7 @@ export const Check: React.FC<Props> = ({ handleSearch, response, post }) => {
   return (
     <MainTemplate
       header={<Header handleSearch={handleSearch} post={post} />}
-      title={<Title2>you ordered</Title2>}
+      title={<Title>you ordered</Title>}
       body={<CheckForm response={response} />}
     />
   );

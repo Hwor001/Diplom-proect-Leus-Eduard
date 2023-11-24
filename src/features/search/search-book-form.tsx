@@ -44,10 +44,15 @@ const MainBookStoreWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
+
+  & > :last-child {
+    grid-column: span 3;
+    justify-self: center;
+  }
 `;
 
 const PostsWrapper = styled.div`
-  //   width: 352px;
+  width: 352px;
   height: auto;
 `;
 

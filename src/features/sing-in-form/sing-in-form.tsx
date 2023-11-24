@@ -38,7 +38,7 @@ export const SingInForm: React.FC = () => {
           dispatch(setEmail(currentTarget.value))
         }
       />
-      <Input
+      <StyledInput
         type="password"
         labelText="Password"
         inputText="Your password"
@@ -58,4 +58,8 @@ export const SingInForm: React.FC = () => {
 const RegistrationWrapper = styled.div`
   border-top: 1px solid #e7e7e7;
   padding: 31px;
+`;
+
+const StyledInput = styled(Input)`
+  margin-bottom: 8px;
 `;

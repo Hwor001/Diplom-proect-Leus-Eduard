@@ -13,6 +13,6 @@ const TitleWrapper = styled.h1`
   color: var(--text-primary-color);
   font-family: 'Bebas Neue';
   font-weight: 700;
-  font-size: 24px;
-  line-height: 24px;
+  font-size: 56px;
+  line-height: 64px;
 `;

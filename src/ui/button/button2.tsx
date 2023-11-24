@@ -18,7 +18,7 @@ const ButtonWrapper = styled.button`
   all: unset;
   display: flex;
   cursor: pointer;
-  margin-top: 40px;
+  margin-bottom: 40px;
   justify-content: center;
   &:hover {
     color: blue;

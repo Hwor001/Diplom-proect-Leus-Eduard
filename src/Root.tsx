@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { Favorite } from '#ui/pages/favorite';
 import { Response, SeachBooks } from '#features/auth/types';
 import { Basket } from '#ui/pages/basket';
-import { Check } from '#features/newsletter/cheack';
+import { Check } from '#ui/pages/cheack';
 import { Subscribe } from '#ui/pages/subscribToNewsletter';
 
 export function Root() {

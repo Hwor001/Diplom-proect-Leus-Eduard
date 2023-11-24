@@ -47,4 +47,8 @@ const MainBookStoreWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
+
+  & > :nth-last-child(-n + 2) {
+    transform: translateX(183.5px);
+  }
 `;

@@ -25,9 +25,6 @@ const searchBookSlice = createSlice({
     ) => {
       state.loading = true;
     },
-    // setPageCount: (state, action: PayloadAction<number>) => {
-    //   state.pageCount = action.payload;
-    // },
     getSearchBookSuccess: (state, action: PayloadAction<SeachBooks>) => {
       state.loading = false;
       state.data = action.payload;

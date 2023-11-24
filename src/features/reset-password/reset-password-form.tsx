@@ -19,6 +19,7 @@ export const ResetPasswordForm: React.FC = () => {
         setResetSent(true);
       })
       .catch((error) => {
+        alert('incorrect email address');
         const errorCode = error.code;
         const errorMessage = error.message;
       });
@@ -32,7 +33,7 @@ export const ResetPasswordForm: React.FC = () => {
           You will receive an email {email} with a link to reset your password!
         </SuccessMessage>
       )}
-      <Input
+      <StyledInput
         type="email"
         labelText="Email"
         inputText="Your email"
@@ -59,4 +60,8 @@ const RegistrationWrapper = styled.div`
 
 const SuccessMessage = styled.p`
   width: 480px;
+`;
+
+const StyledInput = styled(Input)`
+  margin-bottom: 40px;
 `;

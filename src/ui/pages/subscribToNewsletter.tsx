@@ -1,6 +1,6 @@
 import { MainTemplate } from '#ui/templates/main-template';
 import { BackLink } from '../../features/back-link/back-link';
-import { Title2 } from '#ui/title/title2';
+import { Title } from '#ui/title/title';
 import Header from '#ui/header/header';
 import { SeachBooks } from '#features/auth/types';
 
@@ -14,7 +14,7 @@ export const Subscribe: React.FC<Props> = ({ handleSearch, post }) => {
     <MainTemplate
       header={<Header handleSearch={handleSearch} post={post} />}
       backLink={<BackLink />}
-      title={<Title2>You have subscribed</Title2>}
+      title={<Title>You have subscribed</Title>}
     />
   );
 };

@@ -1,11 +1,12 @@
 import { MainTemplate } from '#ui/templates/main-template';
-import { Title2 } from '#ui/title/title2';
+import { Title } from '#ui/title/title';
 import Header from '#ui/header/header';
 import { SearchBookForm } from '#features/search/search-book-form';
 import { useState, useEffect } from 'react';
 import { SeachBooks } from '#features/auth/types';
 import { useAppDispatch, useAppSelector } from '#hooks';
 import { getSearchBook } from '#features/postactive/search.slice';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface Props {
   handleSearch: (searchText: string) => void;
@@ -28,12 +29,16 @@ export const SearchBook: React.FC<Props> = ({
     loading: false,
     error: null,
   };
-  const [page, setPage] = useState<number>(1);
-  const [pageCount, setPageCount] = useState<number>(0);
+  const navigate = useNavigate();
+  const [pageCount, setPageCount] = useState(0);
+  const { page } = useParams();
+  const [currentPage, setCurrentPage] = useState<number>(Number(page) || 1);
 
   useEffect(() => {
     if (searchResultsText) {
-      dispatch(getSearchBook({ searchText: searchResultsText, page }));
+      dispatch(
+        getSearchBook({ searchText: searchResultsText, page: currentPage })
+      );
       const totalPages = Math.ceil(books?.total || 0 / 10);
       setPageCount(totalPages <= 100 ? totalPages : 100);
     }
@@ -51,19 +56,20 @@ export const SearchBook: React.FC<Props> = ({
     return <div>No books found</div>;
   }
 
-  const onPageChange = (currentPage: number) => {
-    setPage(currentPage);
+  const onPageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    navigate(`/search/${searchResultsText}/${newPage}`);
   };
 
   return (
     <MainTemplate
       header={<Header handleSearch={handleSearch} post={post} />}
-      title={<Title2>{searchResultsText} Search results</Title2>}
+      title={<Title>{searchResultsText} Search results</Title>}
       body={
         <SearchBookForm
           response={books}
           pageCount={pageCount}
-          currentPage={page}
+          currentPage={currentPage}
           onPageChange={onPageChange}
         />
       }

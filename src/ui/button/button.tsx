@@ -41,7 +41,7 @@ const ButtonWrapper = styled.button<{
   height: 56px;
   cursor: pointer;
   width: ${({ $fitContent }) =>
-    $fitContent ? 'fit-content' : 'calc(100% - 20px)'};
+    $fitContent ? 'fit-content' : '-webkit-fill-available'};
 
   ${({ $variant }) => {
     switch ($variant) {

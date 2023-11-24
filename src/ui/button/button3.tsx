@@ -37,7 +37,6 @@ const ButtonWrapper = styled.button<{
   font-size: 24px;
   line-height: 24px;
   text-align: center;
-  height: 56px;
   cursor: pointer;
   padding: 5px 10px;
   width: ${({ $fitContent }) =>

@@ -7,23 +7,8 @@ import {
 } from '../sing-up-form/sing-up-form.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
-// import { register } from '../auth/registration.slice';
 import { Title } from '#ui/title/title';
 import { getAuth, updatePassword } from 'firebase/auth';
-
-// const generateRandomPassword = (): string => {
-//   const characters =
-//     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//   const passwordLength = 8;
-
-//   let password = '';
-//   for (let i = 0; i < passwordLength; i++) {
-//     const randomIndex = Math.floor(Math.random() * characters.length);
-//     password += characters.charAt(randomIndex);
-//   }
-
-//   return password;
-// };
 
 export const NewPasswordForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -52,7 +37,6 @@ export const NewPasswordForm: React.FC = () => {
       }
     } else {
       console.error('No authenticated user. Please sign in.');
-      // Дополнительные действия, например, перенаправление пользователя на страницу входа
     }
   };
 

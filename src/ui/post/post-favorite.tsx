@@ -12,10 +12,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeFromFavorites } from '../../features/postactive/favorite.slice';
 import { PopularBookForm } from '#features/popular-form/popular-form';
 import { useState, useEffect } from 'react';
-import { getDatabase, ref, onValue, get } from 'firebase/database';
+import { ref, get } from 'firebase/database';
 import { auth } from '../../firebase';
 import { database } from '../../firebase';
-// import { setFavorites } from '../../features/postactive/favorite2.slice';
 
 interface StarRatingProps {
   rating: number;
@@ -63,7 +62,7 @@ export const FavoriteBook: React.FC<BookProps> = ({ response }) => {
           );
           get(favoritesRef)
             .then((snapshot) => {
-              console.log('Snapshot value:', snapshot.val()); // Log the snapshot value
+              console.log('Snapshot value:', snapshot.val());
 
               if (snapshot.exists()) {
                 const userArray = Object.entries(snapshot.val()).map(
@@ -72,28 +71,15 @@ export const FavoriteBook: React.FC<BookProps> = ({ response }) => {
                     ...(data as Record<string, unknown>),
                   })
                 );
-                console.log('User array:', userArray); // Log the userArray
+                console.log('User array:', userArray);
                 setUsers((userArray) => userArray);
               } else {
                 console.log('No data available');
               }
             })
             .catch((error) => {
-              console.error('Error fetching data:', error); // Log any errors
+              console.error('Error fetching data:', error);
             });
-
-          // onValue(favoritesRef, (snapshot) => {
-          //   const favoritesArray: Response[] = [];
-
-          //   snapshot.forEach((childSnapshot) => {
-          //     const isbn13 = childSnapshot.key;
-          //     const data = childSnapshot.val();
-          //     const book: Response = { isbn13, ...data };
-          //     favoritesArray.push(book);
-          //   });
-          //   console.log(favoritesArray);
-          //   // dispatch(setFavorites(favoritesArray as Response[]));
-          // });
         }
       }
     });
@@ -110,13 +96,15 @@ export const FavoriteBook: React.FC<BookProps> = ({ response }) => {
         ? items.map((element) => (
             <PostsWrapper key={element.isbn13}>
               <ImgInfoWrapper>
-                <PostImg>
-                  {<img src={element.image} alt={`Post ${element.isbn13}`} />}
-                </PostImg>
+                <ImgLink to={`/books/${element.isbn13}`}>
+                  <PostImg>
+                    {<img src={element.image} alt={`Post ${element.isbn13}`} />}
+                  </PostImg>
+                </ImgLink>
                 <Infowrapper>
-                  <Link to={`/books/${element.isbn13}`}>
+                  <TitleLink to={`/books/${element.isbn13}`}>
                     <TitleWrapper>{element.title}</TitleWrapper>
-                  </Link>
+                  </TitleLink>
                   <AuthorPublisherPublishedWrapper>
                     {`by ${element.authors}. ${element.publisher} ${element.year}`}
                   </AuthorPublisherPublishedWrapper>
@@ -151,13 +139,13 @@ const FontWrapper = styled.div`
 `;
 
 const PostsWrapper = styled.div`
-  //   width: 352px;
   height: auto;
   display: flex;
   justify-content: space-between;
 `;
 
 const Infowrapper = styled.div`
+  margin-left: 3px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -186,6 +174,7 @@ const PostImg = styled.div`
   & img {
     width: 100%;
     height: auto;
+    transition: border 0.3s;
   }
 `;
 
@@ -210,4 +199,24 @@ const AuthorPublisherPublishedWrapper = styled.p`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
+`;
+
+const TitleLink = styled(Link)`
+  text-decoration: none;
+  color: #000;
+
+  &:hover {
+    text-decoration: underline;
+    color: #007bff;
+  }
+`;
+
+const ImgLink = styled(Link)`
+  & img {
+    border: 2px solid transparent;
+  }
+
+  &:hover img {
+    border: 2px solid #007bff;
+  }
 `;

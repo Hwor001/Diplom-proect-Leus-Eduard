@@ -31,9 +31,21 @@ export const AccountForm: React.FC = () => {
     ({ signUpForm }) => signUpForm.confirmedPassword
   );
 
-  const cancel = {};
+  const cancel = () => {
+    dispatch(setName(''));
+    dispatch(setEmail(''));
+    dispatch(setPassword(''));
+    dispatch(setNewPassword(''));
+    dispatch(setConfirmedPassword(''));
+    navigate(-1);
+  };
 
   const newPasswordUpdate = () => {
+    if (!oldPassword || !newPasswordValue || !confirmedPassword || !name) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -58,10 +70,12 @@ export const AccountForm: React.FC = () => {
           })
           .catch((error) => {
             console.error('Error updating password:', error);
+            alert('wrong password');
           });
       })
       .catch((error) => {
         console.error('Error signing in:', error);
+        alert('incorrect email address, password ');
       });
   };
 
@@ -122,7 +136,7 @@ export const AccountForm: React.FC = () => {
         <Button variant="primary" onClick={newPasswordUpdate}>
           Save changes
         </Button>
-        <Button3 variant="primary" onClick={() => cancel}>
+        <Button3 variant="primary" onClick={cancel}>
           cancel
         </Button3>
       </ButtonWrapper>

@@ -1,6 +1,6 @@
 import { MainTemplate } from '#ui/templates/main-template';
 import { BackLink } from '../../features/back-link/back-link';
-import { Title2 } from '#ui/title/title2';
+import { Title } from '#ui/title/title';
 import Header from '#ui/header/header';
 import { BasketForm } from '#features/basket-form/basket-form';
 import { Response, SeachBooks } from '#features/auth/types';
@@ -16,7 +16,7 @@ export const Basket: React.FC<Props> = ({ handleSearch, response, post }) => {
     <MainTemplate
       header={<Header handleSearch={handleSearch} post={post} />}
       backLink={<BackLink />}
-      title={<Title2>Your cart</Title2>}
+      title={<Title>Your cart</Title>}
       body={<BasketForm response={response} />}
     />
   );

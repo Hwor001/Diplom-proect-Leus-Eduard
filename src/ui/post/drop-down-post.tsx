@@ -42,12 +42,12 @@ export const DropDown: React.FC<DropDownProps> = ({
     <DropDownWrapper>
       {booksToShow.map((book, index) => (
         <DropDownElement key={index}>
-          <Link to={`/books/${book.isbn13}`}>
+          <TitleLink to={`/books/${book.isbn13}`}>
             <PostImg>
               <img src={book.image} alt={`Post ${book.isbn13}`} />
             </PostImg>
             <TitleWrapper>{book.title}</TitleWrapper>
-          </Link>
+          </TitleLink>
         </DropDownElement>
       ))}
     </DropDownWrapper>
@@ -68,14 +68,27 @@ const PostImg = styled.div`
 
 const DropDownWrapper = styled.div`
   position: absolute;
-  width: 540px;
+  width: 542px;
   background: #e7e7e7;
-  transform: translate(-50%, 80px);
-  left: 50.5%;
+  transform: translate(-50%, 79px);
+  left: 50.8%;
+  z-index: 2;
 `;
 
 const DropDownElement = styled.div`
   & a {
     display: flex;
+  }
+`;
+
+const TitleLink = styled(Link)`
+  border: 2px solid transparent;
+  text-decoration: none;
+  color: #000;
+
+  &:hover {
+    text-decoration: underline;
+    color: #007bff;
+    border: 2px solid #007bff;
   }
 `;

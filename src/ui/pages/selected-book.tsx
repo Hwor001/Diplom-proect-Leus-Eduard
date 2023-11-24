@@ -1,6 +1,6 @@
 import { MainTemplate } from '#ui/templates/main-template';
 import { BackLink } from '../../features/back-link/back-link';
-import { Title2 } from '#ui/title/title2';
+import { Title } from '#ui/title/title';
 import Header from '#ui/header/header';
 import { SelectedBookForm } from '#features/selected-book/selected-book-form';
 import { useParams } from 'react-router-dom';
@@ -46,7 +46,7 @@ export const SelectedBook: React.FC<Props> = ({
     <MainTemplate
       header={<Header handleSearch={handleSearch} post={post} />}
       backLink={<BackLink />}
-      title={<Title2>{book.title}</Title2>}
+      title={<Title>{book.title}</Title>}
       body={<SelectedBookForm response={book} title={book.title} />}
     />
   );

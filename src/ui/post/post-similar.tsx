@@ -16,12 +16,14 @@ export const PostsSimilar: React.FC<PostProps> = ({
     <PostsSimilarWrapper>
       {response.books.slice(currentIndex, endIndex).map((book, index) => (
         <PostsWrapper key={index}>
-          <PostImg>
-            <img src={book.image} alt={`Post ${book.isbn13}`} />
-          </PostImg>
-          <Link to={`/books/${book.isbn13}`}>
+          <ImgLink to={`/books/${book.isbn13}`}>
+            <PostImg>
+              <img src={book.image} alt={`Post ${book.isbn13}`} />
+            </PostImg>
+          </ImgLink>
+          <TitleLink to={`/books/${book.isbn13}`}>
             <TitleWrapper>{book.title}</TitleWrapper>
-          </Link>
+          </TitleLink>
         </PostsWrapper>
       ))}
     </PostsSimilarWrapper>
@@ -48,4 +50,30 @@ const TitleWrapper = styled.p`
 
 const PostImg = styled.div`
   text-align: center;
+
+  & img {
+    width: 100%;
+    height: auto;
+    transition: border 0.3s;
+  }
+`;
+
+const TitleLink = styled(Link)`
+  text-decoration: none;
+  color: #000;
+
+  &:hover {
+    text-decoration: underline;
+    color: #007bff;
+  }
+`;
+
+const ImgLink = styled(Link)`
+  & img {
+    border: 2px solid transparent;
+  }
+
+  &:hover img {
+    border: 2px solid #007bff;
+  }
 `;

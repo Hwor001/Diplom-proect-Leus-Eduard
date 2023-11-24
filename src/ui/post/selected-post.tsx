@@ -23,7 +23,7 @@ import { NewsLetter } from '#features/newsletter/newsletter-form';
 import { Button } from '#ui/button/button';
 import { Button2 } from '#ui/button/button2';
 import { faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { getDatabase, ref, set, remove } from 'firebase/database';
+import { ref, set, remove } from 'firebase/database';
 import { SimilarBoookForm } from '#features/similar-books-form/similar-books-form';
 import { useState, useEffect } from 'react';
 import { auth, database } from '../../firebase';
@@ -226,7 +226,7 @@ export const SelectedPosts: React.FC<BookProps> = ({ response }) => {
             </Text2Wrapper>
           </DopInfoWrapper>
           <Button variant="primary" onClick={addToCart}>
-            add to cart
+            {isItemInCart ? 'Remove from cart' : 'Add to cart'}
           </Button>
           <Button2 onClick={PreviewBook}>Preview book</Button2>
         </InfoWrapper>
@@ -249,8 +249,8 @@ const FontWrapper = styled.div`
   position: absolute;
   background: white;
   padding: 16px;
-  // transform: translate3d(-148px, 25px, 10px);
   transform: translate(40%, 15%);
+  z-index: 1;
 
   & svg {
     cursor: pointer;

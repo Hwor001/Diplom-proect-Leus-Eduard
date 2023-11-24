@@ -4,7 +4,6 @@ import {
   getSearchBookSuccess,
   getSearchBookFailure,
   getSearchBook,
-  //   setPageCount,
 } from './search.slice';
 import { Book, SeachBooks } from '../auth/types';
 
@@ -30,8 +29,6 @@ function* fetchSearchBook(action: ReturnType<typeof getSearchBook>) {
       total: data.total,
       books: data.books,
     };
-    // const calculatedPageCount = Math.ceil(data.total / 10);
-    // yield setPageCount(calculatedPageCount <= 100 ? calculatedPageCount : 100);
     yield put(getSearchBookSuccess(successPayload));
   } catch (error) {
     yield put(getSearchBookFailure(error as string));

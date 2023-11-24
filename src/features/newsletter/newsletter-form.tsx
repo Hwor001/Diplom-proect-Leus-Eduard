@@ -67,4 +67,10 @@ const SubscribeWrapper = styled.h2`
   line-height: 60px;
 `;
 
-const TextWrapper = styled.p``;
+const TextWrapper = styled.p`
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 28px;
+  color: #a8a8a8;
+`;

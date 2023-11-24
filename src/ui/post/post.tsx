@@ -36,17 +36,21 @@ interface PostProps {
 export const Posts: React.FC<PostProps> = ({ post, response }) => {
   return (
     <PostsWrapper>
-      <PostImg>{<img src={post.image} alt={`Post ${post.isbn13}`} />}</PostImg>
-      <Link to={`/books/${post.isbn13}`}>
+      <ImgLink to={`/books/${post.isbn13}`}>
+        <PostImg>
+          {<img src={post.image} alt={`Post ${post.isbn13}`} />}
+        </PostImg>
+      </ImgLink>
+      <TitleLink to={`/books/${post.isbn13}`}>
         <TitleWrapper>{post.title}</TitleWrapper>
-      </Link>
+      </TitleLink>
       {/* <StarRatingForm response={response} /> */}
     </PostsWrapper>
   );
 };
 
 const PostsWrapper = styled.div`
-  //   width: 352px;
+  width: 352px;
   height: auto;
 `;
 
@@ -57,13 +61,39 @@ const TitleWrapper = styled.p`
   line-height: 32px;
 `;
 
-const StarWrapper = styled.div`
-  & svg {
-    width: 14px;
-    height: 13px;
-  }
-`;
+// const StarWrapper = styled.div`
+//   & svg {
+//     width: 14px;
+//     height: 13px;
+//   }
+// `;
 
 const PostImg = styled.div`
   text-align: center;
+
+  & img {
+    width: 100%;
+    height: auto;
+    transition: border 0.3s;
+  }
+`;
+
+const TitleLink = styled(Link)`
+  text-decoration: none;
+  color: #000;
+
+  &:hover {
+    text-decoration: underline;
+    color: #007bff;
+  }
+`;
+
+const ImgLink = styled(Link)`
+  & img {
+    border: 2px solid transparent;
+  }
+
+  &:hover img {
+    border: 2px solid #007bff;
+  }
 `;

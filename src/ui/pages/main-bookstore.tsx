@@ -1,6 +1,6 @@
 import { MainTemplate } from '#ui/templates/main-template';
 import { BackLink } from '../../features/back-link/back-link';
-import { Title2 } from '#ui/title/title2';
+import { Title } from '#ui/title/title';
 import Header from '#ui/header/header';
 import { MainBookStoreForm } from '#features/main-blog/maim-bookstore-form';
 import { useAppDispatch, useAppSelector } from '#hooks';
@@ -35,7 +35,7 @@ export const MainBookStore: React.FC<Props> = ({
     <MainTemplate
       header={<Header handleSearch={handleSearch} post={post} />}
       backLink={<BackLink />}
-      title={<Title2>New Releases Books</Title2>}
+      title={<Title>New Releases Books</Title>}
       body={<MainBookStoreForm posts={posts} response={response} />}
     />
   );
