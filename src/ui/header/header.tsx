@@ -14,11 +14,17 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { DropDown } from '#ui/post/drop-down-post';
 import { SeachBooks } from '#features/auth/types';
-import { auth } from '../../firebase';
+import { auth, database } from '../../firebase';
 import { getAuth, signOut } from 'firebase/auth';
 import { faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { ref, get } from 'firebase/database';
+import {
+  setIsFavorites,
+  setIsBaskets,
+} from '../../features/postactive/cartAndFavoritesSlice';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store1';
+import { useAppDispatch } from '#hooks';
 
 interface Props {
   handleSearch: (searchText: string) => void;
@@ -27,14 +33,18 @@ interface Props {
 
 export const Header: React.FC<Props> = ({ handleSearch, post }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [inputValue, setInputValue] = useState('');
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
   const [userName, setUserName] = useState('');
-  const items = useSelector(
-    (state: RootState) => state.favoriteBooks.favorites
+  const { isFavorites, isBaskets } = useSelector(
+    (state: RootState) => state.cartAndFavorites
   );
-  const item = useSelector((state: RootState) => state.basketBooks.itemsInCart);
+  const isFavorite = useSelector(
+    (state: RootState) => state.favorite.favorites
+  );
+  const isBasket = useSelector((state: RootState) => state.basket.itemsInCart);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -45,7 +55,25 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
         setUserName('');
       }
     });
-  }, []);
+    const favoritesRef = ref(database, `users/${userName}/favorites`);
+    const basketRef = ref(database, `users/${userName}/basket`);
+
+    get(favoritesRef)
+      .then((snapshot) => {
+        dispatch(setIsFavorites(snapshot.exists()));
+      })
+      .catch((error) => {
+        console.error('Error fetching favorites from database:', error);
+      });
+
+    get(basketRef)
+      .then((snapshot) => {
+        dispatch(setIsBaskets(snapshot.exists()));
+      })
+      .catch((error) => {
+        console.error('Error fetching favorites from database:', error);
+      });
+  }, [userName, isFavorite, isBasket]);
 
   const signOutUser = async () => {
     try {
@@ -58,13 +86,13 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
     }
   };
 
-  const Bookstore = () => {
-    navigate('/MainBookStore');
-  };
-
   const Search = () => {
     if (userName !== '') {
-      handleSearch(inputValue);
+      if (inputValue.trim() === '') {
+        alert('Please enter a search term.');
+      } else {
+        handleSearch(inputValue);
+      }
     } else {
       alert('Register or log in.');
     }
@@ -82,7 +110,9 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
             src={BookstoreWord}
             alt="Bookstore"
             onClick={() =>
-              userName !== '' ? Bookstore : alert('Register or log in.')
+              userName !== ''
+                ? navigate(`/MainBookStore`)
+                : alert('Register or log in.')
             }
           />
         </ImgWrapper>
@@ -94,7 +124,13 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
-          <Link to={userName !== '' ? `/search/${inputValue}/${page}` : '#'}>
+          <Link
+            to={
+              userName !== '' && inputValue.trim() !== ''
+                ? `/search/${inputValue}/${page}`
+                : '#'
+            }
+          >
             <FontAwesomeIcon icon={faSearch} onClick={Search} />
           </Link>
         </SeachWrapper>
@@ -104,7 +140,7 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
         <FontWrapper>
           <Link to={userName !== '' ? `/Favorite` : '#'}>
             <FontAwesomeIcon
-              icon={items.length > 0 ? fasHeart : faHeart}
+              icon={isFavorite.length > 0 || isFavorites ? fasHeart : faHeart}
               onClick={() =>
                 userName !== ''
                   ? navigate(`/Favorite`)
@@ -115,7 +151,9 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
           <Link to={userName !== '' ? `/Basket` : '#'}>
             <FontAwesomeIcon
               icon={faBasketShopping}
-              style={{ color: item.length > 0 ? 'green' : 'black' }}
+              style={{
+                color: isBasket.length > 0 || isBaskets ? 'green' : 'black',
+              }}
               onClick={() =>
                 userName !== ''
                   ? navigate(`/Basket`)
@@ -258,7 +296,10 @@ const SeachWrapper = styled.div`
   }
   & svg {
     position: absolute;
-    transform: translate(-30px, 23px);
+    transform: translate(-30px, 20px);
+  }
+  & svg:hover {
+    background-color: silver;
   }
 `;
 
@@ -269,6 +310,9 @@ const FontWrapper = styled.div`
   & svg {
     padding: 15px;
     cursor: pointer;
+  }
+  & svg:hover {
+    background-color: silver;
   }
 `;
 

@@ -19,12 +19,14 @@ export const SearchBookForm: React.FC<
       <MainBookStoreWrapper>
         {response.books.map((book, index) => (
           <PostsWrapper key={index}>
-            <PostImg>
-              <img src={book.image} alt={`Post ${book.isbn13}`} />
-            </PostImg>
-            <Link to={`/books/${book.isbn13}`}>
+            <ImgLink to={`/books/${book.isbn13}`}>
+              <PostImg>
+                <img src={book.image} alt={`Post ${book.isbn13}`} />
+              </PostImg>
+            </ImgLink>
+            <TitleLink to={`/books/${book.isbn13}`}>
               <TitleWrapper>{book.title}</TitleWrapper>
-            </Link>
+            </TitleLink>
           </PostsWrapper>
         ))}
       </MainBookStoreWrapper>
@@ -65,4 +67,24 @@ const TitleWrapper = styled.p`
 
 const PostImg = styled.div`
   text-align: center;
+`;
+
+const TitleLink = styled(Link)`
+  text-decoration: none;
+  color: #000;
+
+  &:hover {
+    text-decoration: underline;
+    color: #007bff;
+  }
+`;
+
+const ImgLink = styled(Link)`
+  & img {
+    border: 2px solid transparent;
+  }
+
+  &:hover img {
+    border: 2px solid #007bff;
+  }
 `;

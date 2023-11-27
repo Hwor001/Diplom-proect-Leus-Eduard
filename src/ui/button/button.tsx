@@ -57,9 +57,17 @@ const ButtonWrapper = styled.button<{
     }
   }}
 
+  &:hover:disabled {
+    background-color: rgba(128, 128, 128, 0.9);
+  }
+
+  &:hover {
+    background-color: ${({ disabled }) =>
+      disabled ? 'rgba(128,128,128,0.9)' : '#5b5a62'};
+  }
+
   &:disabled {
-    cursor: none;
-    opacity: 0.67;
-    color: gray;
+    background-color: rgba(128, 128, 128, 0.9);
+    color: black;
   }
 `;

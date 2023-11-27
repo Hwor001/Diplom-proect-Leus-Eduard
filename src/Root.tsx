@@ -5,8 +5,6 @@ import { PageSingInAndUp } from '#ui/pages/page-sing-in-and-up';
 import { ResetPassword } from '#ui/pages/reset-password';
 import { SelectedBook } from '#ui/pages/selected-book';
 import './App.css';
-// import { useAppSelector } from '#hooks';
-// import styled from 'styled-components';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { SearchBook } from '#ui/pages/search-book';
 import { useState } from 'react';
@@ -73,11 +71,7 @@ export function Root() {
         <Route
           path="/MainBookStore"
           element={
-            <MainBookStore
-              handleSearch={handleSearch}
-              response={yourResponseObject}
-              post={yourPostObject}
-            />
+            <MainBookStore handleSearch={handleSearch} post={yourPostObject} />
           }
         />
         <Route
@@ -99,11 +93,7 @@ export function Root() {
         <Route
           path="/Favorite"
           element={
-            <Favorite
-              handleSearch={handleSearch}
-              response={yourResponseObject}
-              post={yourPostObject}
-            />
+            <Favorite handleSearch={handleSearch} post={yourPostObject} />
           }
         />
         <Route
@@ -118,23 +108,11 @@ export function Root() {
         />
         <Route
           path="/Basket"
-          element={
-            <Basket
-              handleSearch={handleSearch}
-              response={yourResponseObject}
-              post={yourPostObject}
-            />
-          }
+          element={<Basket handleSearch={handleSearch} post={yourPostObject} />}
         />
         <Route
           path="/Check"
-          element={
-            <Check
-              handleSearch={handleSearch}
-              response={yourResponseObject}
-              post={yourPostObject}
-            />
-          }
+          element={<Check handleSearch={handleSearch} post={yourPostObject} />}
         />
         <Route
           path="/Account"

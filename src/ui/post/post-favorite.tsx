@@ -6,15 +6,15 @@ import {
   faStar as fasFaStar,
   faHeart,
 } from '@fortawesome/free-solid-svg-icons';
+import { useAppDispatch } from '#hooks';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
-import { RootState, store } from '../../store1';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeFromFavorites } from '../../features/postactive/favorite.slice';
 import { PopularBookForm } from '#features/popular-form/popular-form';
 import { useState, useEffect } from 'react';
-import { ref, get } from 'firebase/database';
+import { ref, get, DataSnapshot, remove } from 'firebase/database';
 import { auth } from '../../firebase';
 import { database } from '../../firebase';
+import { setIsFavorites } from '../../features/postactive/cartAndFavoritesSlice';
+import { removeFromFavorites } from '../../features/postactive/favorite.slice';
 
 interface StarRatingProps {
   rating: number;
@@ -38,62 +38,65 @@ const StarRating: React.FC<StarRatingProps> = ({ rating }) => {
   return <StarWrapper>{stars}</StarWrapper>;
 };
 
-interface BookProps {
-  response: Response;
-}
-
-export const FavoriteBook: React.FC<BookProps> = ({ response }) => {
-  const dispatch = useDispatch();
-  const [users, setUsers] = useState<Response[]>([]);
-  const items = useSelector(
-    (state: RootState) => state.favoriteBooks.favorites
-  );
+export const FavoriteBook: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [userName, setUserName] = useState('');
-
+  const [favoriteBooks, setFavoriteBooks] = useState<Response[]>([]);
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         const displayName = user.displayName || '';
         setUserName(displayName);
-        if (displayName) {
-          const favoritesRef = ref(
-            database,
-            `users/${userName}/favorites/${response.isbn13}`
-          );
-          get(favoritesRef)
-            .then((snapshot) => {
-              console.log('Snapshot value:', snapshot.val());
-
-              if (snapshot.exists()) {
-                const userArray = Object.entries(snapshot.val()).map(
-                  ([isbn13, data]: [string, unknown]) => ({
-                    isbn13: Number(isbn13),
-                    ...(data as Record<string, unknown>),
-                  })
-                );
-                console.log('User array:', userArray);
-                setUsers((userArray) => userArray);
-              } else {
-                console.log('No data available');
-              }
-            })
-            .catch((error) => {
-              console.error('Error fetching data:', error);
-            });
-        }
       }
     });
-  }, []);
+
+    const fetchData = async () => {
+      const favoritesRef = ref(database, `users/${userName}/favorites`);
+      try {
+        const snapshot: DataSnapshot = await get(favoritesRef);
+        if (snapshot.exists()) {
+          const favoritesData: Response[] = [];
+          snapshot.forEach((childSnapshot) => {
+            favoritesData.push(childSnapshot.val());
+          });
+          setFavoriteBooks(favoritesData);
+          dispatch(setIsFavorites(true));
+        } else {
+          dispatch(setIsFavorites(false));
+        }
+      } catch (error) {
+        console.error('Error fetching data from database:', error);
+      }
+    };
+
+    if (userName) {
+      fetchData();
+    }
+
+    return () => unsubscribe();
+  }, [userName]);
 
   const handleDelete = (element: Response) => {
     dispatch(removeFromFavorites(element.isbn13));
-    console.log('After dispatch:', store.getState());
+    const favoriteRef = ref(
+      database,
+      `users/${userName}/favorites/${element.isbn13}`
+    );
+    remove(favoriteRef)
+      .then(() => {
+        setFavoriteBooks((prevFavorites) =>
+          prevFavorites.filter((book) => book.isbn13 !== element.isbn13)
+        );
+      })
+      .catch((error) => {
+        console.error('Error removing from database:', error);
+      });
   };
 
   return (
     <>
-      {items.length > 0
-        ? items.map((element) => (
+      {favoriteBooks.length > 0
+        ? favoriteBooks.map((element) => (
             <PostsWrapper key={element.isbn13}>
               <ImgInfoWrapper>
                 <ImgLink to={`/books/${element.isbn13}`}>

@@ -13,7 +13,7 @@ const favoriteBooksSlice = createSlice({
     addToFavorites(state, action) {
       console.log('addToFavorites', action.payload);
       state.favorites.push(action.payload);
-      state.isFavorite = true;
+      state.isFavorite = false;
     },
     removeFromFavorites(state, action) {
       console.log('removeFromFavorites', action.payload);

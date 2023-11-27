@@ -10,15 +10,10 @@ import { Response, SeachBooks } from '#features/auth/types';
 
 interface Props {
   handleSearch: (searchText: string) => void;
-  response: Response;
   post: SeachBooks;
 }
 
-export const MainBookStore: React.FC<Props> = ({
-  handleSearch,
-  response,
-  post,
-}) => {
+export const MainBookStore: React.FC<Props> = ({ handleSearch, post }) => {
   const dispatch = useAppDispatch();
   const { posts, isLoading } = useAppSelector(({ allPosts }) => allPosts);
   useEffect(() => {
@@ -36,7 +31,7 @@ export const MainBookStore: React.FC<Props> = ({
       header={<Header handleSearch={handleSearch} post={post} />}
       backLink={<BackLink />}
       title={<Title>New Releases Books</Title>}
-      body={<MainBookStoreForm posts={posts} response={response} />}
+      body={<MainBookStoreForm posts={posts} />}
     />
   );
 };

@@ -83,7 +83,7 @@ export const AccountForm: React.FC = () => {
     <RegistrationWrapper>
       <Title>profile</Title>
       <NameEmailWrapper>
-        <Input
+        <InputWrap
           type="text"
           labelText="Name"
           inputText="Your name"
@@ -113,7 +113,7 @@ export const AccountForm: React.FC = () => {
         }
       />
       <PasswordWrapper>
-        <Input
+        <InputWrap
           type="password"
           labelText="New password"
           inputText="Your password"
@@ -122,7 +122,7 @@ export const AccountForm: React.FC = () => {
             dispatch(setNewPassword(currentTarget.value))
           }
         />
-        <Input
+        <InputWrapper
           type="password"
           labelText="Confirm new password"
           inputText="Confirm your password"
@@ -159,4 +159,12 @@ const ButtonWrapper = styled.div`
   width: 544px;
   display: flex;
   margin-left: auto;
+`;
+
+const InputWrapper = styled(Input)`
+  margin-bottom: 121px;
+`;
+
+const InputWrap = styled(Input)`
+  margin-right: 32px;
 `;

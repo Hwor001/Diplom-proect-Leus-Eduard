@@ -13,6 +13,7 @@ export const NewsLetter: React.FC = () => {
     navigate('/Subscribe');
   };
   const isEmailValid = email.trim() !== '';
+
   return (
     <SubscribeToNewsletterWrapper>
       <SubscribeWrapper>Subscribe to Newsletter</SubscribeWrapper>

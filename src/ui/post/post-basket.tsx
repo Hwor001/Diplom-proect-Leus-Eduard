@@ -3,37 +3,84 @@ import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { RootState, store } from '../../store1';
+import { RootState } from '../../store1';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteItemFromCart } from '../../features/postactive/basket.slice';
 import { Quantity } from '#ui/element/quantity';
 import { Button } from '#ui/button/button';
+import { useState, useEffect } from 'react';
+import { ref, get, DataSnapshot, remove } from 'firebase/database';
+import { auth } from '../../firebase';
+import { database } from '../../firebase';
+import { deleteItemFromCart } from '../../features/postactive/basket.slice';
 
-interface BookProps {
-  response: Response;
-}
-
-export const BasketBook: React.FC<BookProps> = () => {
-  const dispatch = useDispatch();
+export const BasketBook: React.FC = () => {
   const navigate = useNavigate();
-  const item = useSelector((state: RootState) => state.basketBooks.itemsInCart);
+  const dispatch = useDispatch();
+
+  const [userName, setUserName] = useState('');
+  const [backetBooks, setBacketBooks] = useState<Response[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        const displayName = user.displayName || '';
+        setUserName(displayName);
+      }
+    });
+
+    const basketData = async () => {
+      const basketRef = ref(database, `users/${userName}/basket`);
+      try {
+        const snapshot: DataSnapshot = await get(basketRef);
+        if (snapshot.exists()) {
+          const basketData: Response[] = [];
+          snapshot.forEach((childSnapshot) => {
+            basketData.push(childSnapshot.val());
+          });
+          setBacketBooks(basketData);
+        }
+      } catch (error) {
+        console.error('Error fetching data from database:', error);
+      }
+    };
+
+    if (userName) {
+      basketData();
+    }
+
+    return () => unsubscribe();
+  }, [userName]);
+
+  const handleDelete = (element: Response) => {
+    dispatch(deleteItemFromCart(element.isbn13));
+    const favoriteRef = ref(
+      database,
+      `users/${userName}/basket/${element.isbn13}`
+    );
+    remove(favoriteRef)
+      .then(() => {
+        setBacketBooks((prevFavorites) =>
+          prevFavorites.filter((book) => book.isbn13 !== element.isbn13)
+        );
+      })
+      .catch((error) => {
+        console.error('Error removing from database:', error);
+      });
+  };
+
   const basketQuantity = useSelector(
     (state: RootState) => state.basketQuantity
   );
-  const handleDelete = (element: Response) => {
-    dispatch(deleteItemFromCart(element.isbn13));
-    console.log('After dispatch:', store.getState());
-  };
 
   const check = () => {
     navigate('/Check');
   };
 
-  const totalSum = item.reduce(
+  const totalSum = backetBooks.reduce(
     (sum, element) =>
       sum +
       parseFloat(element.price.replace(/\$/g, '')) *
-        (basketQuantity[element.isbn13] || 0),
+        (basketQuantity[element.isbn13] || 1),
     0
   );
   const VAT_RATE = 0.2;
@@ -42,8 +89,8 @@ export const BasketBook: React.FC<BookProps> = () => {
 
   return (
     <>
-      {item.length > 0
-        ? item.map((element: Response) => (
+      {backetBooks.length > 0
+        ? backetBooks.map((element: Response) => (
             <PostsWrapper key={element.isbn13}>
               <ImgInfoWrapper>
                 <ImgLink to={`/books/${element.isbn13}`}>
@@ -67,7 +114,7 @@ export const BasketBook: React.FC<BookProps> = () => {
                     $
                     {(
                       parseFloat(element.price.replace(/\$/g, '')) *
-                      (basketQuantity[element.isbn13] || 0)
+                      (basketQuantity[element.isbn13] || 1)
                     ).toFixed(2)}
                   </PriceWraper>
                 </StarWrapper>
@@ -102,7 +149,7 @@ export const BasketBook: React.FC<BookProps> = () => {
         <ButtonWrapper>
           <Button
             variant="primary"
-            onClick={item.length > 0 ? check : () => {}}
+            onClick={backetBooks.length > 0 ? check : () => {}}
           >
             check out
           </Button>

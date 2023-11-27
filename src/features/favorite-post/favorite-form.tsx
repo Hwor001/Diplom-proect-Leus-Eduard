@@ -1,16 +1,11 @@
 import { styled } from 'styled-components';
-import { Response } from '#features/auth/types';
 import { FavoriteBook } from '#ui/post/post-favorite';
 
-interface BookProps {
-  response: Response;
-}
-
-export const FavoriteForm: React.FC<BookProps> = ({ response }) => {
+export const FavoriteForm: React.FC = () => {
   return (
     <AllWrapper>
       <FavoriteWrapper>
-        <FavoriteBook response={response}></FavoriteBook>
+        <FavoriteBook></FavoriteBook>
       </FavoriteWrapper>
     </AllWrapper>
   );

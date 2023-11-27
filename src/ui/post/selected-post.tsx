@@ -1,15 +1,6 @@
 import styled from 'styled-components';
 import { Response } from '#features/auth/types';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  addToFavorites,
-  removeFromFavorites,
-} from '../../features/postactive/favorite.slice';
-import {
-  setItemInCart,
-  deleteItemFromCart,
-} from '../../features/postactive/basket.slice';
-import { RootState, store } from '../../store1';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setQuantity } from '../../features/postactive/quantity.slice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -23,10 +14,22 @@ import { NewsLetter } from '#features/newsletter/newsletter-form';
 import { Button } from '#ui/button/button';
 import { Button2 } from '#ui/button/button2';
 import { faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { ref, set, remove } from 'firebase/database';
+import { ref, set, remove, get, DataSnapshot } from 'firebase/database';
 import { SimilarBoookForm } from '#features/similar-books-form/similar-books-form';
 import { useState, useEffect } from 'react';
 import { auth, database } from '../../firebase';
+import {
+  setIsFavorites,
+  setIsBaskets,
+} from '../../features/postactive/cartAndFavoritesSlice';
+import {
+  setItemInCart,
+  deleteItemFromCart,
+} from '../../features/postactive/basket.slice';
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from '../../features/postactive/favorite.slice';
 
 interface StarRatingProps {
   rating: number;
@@ -56,128 +59,166 @@ interface BookProps {
 }
 
 export const SelectedPosts: React.FC<BookProps> = ({ response }) => {
-  const dispatch = useDispatch();
-  const isFavorite = useSelector((state: RootState) =>
-    state.favoriteBooks.favorites.some(
-      (book) => book.isbn13 === response.isbn13
-    )
+  const dispatch = useAppDispatch();
+  const { isFavorites, isBaskets } = useAppSelector(
+    (state) => state.cartAndFavorites
   );
-  const items = useSelector(
-    (state: RootState) => state.basketBooks.itemsInCart
+  const isFavorite = useAppSelector((state) =>
+    state.favorite.favorites.some((book) => book.isbn13 === response.isbn13)
   );
-  const isItemInCart = items.some((item) => item.isbn13 === response.isbn13);
-  const quantity = useSelector(
-    (state: RootState) => state.basketQuantity[response.isbn13] || 0
+  const isBasket = useAppSelector((state) =>
+    state.basket.itemsInCart.some((book) => book.isbn13 === response.isbn13)
+  );
+  const quantity = useAppSelector(
+    (state) => state.basketQuantity[response.isbn13] || 0
   );
   const [userName, setUserName] = useState('');
+
+  function truncateText(title: string, maxChars: number): string {
+    if (title.length <= maxChars) {
+      return title;
+    }
+    const truncatedText = title.substring(0, maxChars);
+    return `${truncatedText}...`;
+  }
+
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
         const displayName = user.displayName || '';
         setUserName(displayName);
+      } else {
+        setUserName('');
       }
     });
-  }, []);
 
-  const addToCart = () => {
-    console.log('response', response);
-    const updatedQuantity = isItemInCart ? quantity - 1 : 1;
+    const favoritesRef = ref(
+      database,
+      `users/${userName}/favorites/${response.isbn13}`
+    );
+    const basketRef = ref(
+      database,
+      `users/${userName}/basket/${response.isbn13}`
+    );
+
+    get(favoritesRef)
+      .then((snapshot) => {
+        dispatch(setIsFavorites(snapshot.exists()));
+      })
+      .catch((error) => {
+        console.error('Error fetching favorites from database:', error);
+      });
+
+    get(basketRef)
+      .then((snapshot) => {
+        dispatch(setIsBaskets(snapshot.exists()));
+      })
+      .catch((error) => {
+        console.error('Error fetching basket from database:', error);
+      });
+  }, [response.isbn13, userName, dispatch]);
+
+  const addToCart = async () => {
+    const updatedQuantity = isBasket ? quantity - 1 : 1;
     dispatch(
       setQuantity({ isbn13: response.isbn13, quantity: updatedQuantity })
     );
-    if (isItemInCart) {
-      dispatch(deleteItemFromCart(response.isbn13));
-      const basketRef = ref(
-        database,
-        `users/${userName}/basket/${response.isbn13}`
-      );
-      remove(basketRef)
-        .then(() => {
-          console.log('Remove from database successful');
+    const basketRef = ref(
+      database,
+      `users/${userName}/basket/${response.isbn13}`
+    );
+    try {
+      if (isBasket) {
+        dispatch(deleteItemFromCart(response.isbn13));
+        await remove(basketRef)
+          .then(() => {
+            console.log('Remove from database successful');
+          })
+          .catch((error) => {
+            console.error('Error removing from database:', error);
+          });
+      } else {
+        dispatch(setItemInCart(response));
+        await set(basketRef, {
+          title: response.title,
+          error: response.error,
+          subtitle: response.subtitle,
+          authors: response.authors,
+          publisher: response.publisher,
+          isbn10: response.isbn10,
+          isbn13: response.isbn13,
+          pages: response.pages,
+          year: response.year,
+          rating: response.rating,
+          desc: response.desc,
+          price: response.price,
+          image: response.image,
+          url: response.url,
+          language: response.language,
         })
-        .catch((error) => {
-          console.error('Error removing from database:', error);
-        });
-    } else {
-      dispatch(setItemInCart(response));
-      const basketRef = ref(
-        database,
-        `users/${userName}/basket/${response.isbn13}`
-      );
-      set(basketRef, {
-        title: response.title,
-        error: response.error,
-        subtitle: response.subtitle,
-        authors: response.authors,
-        publisher: response.publisher,
-        isbn10: response.isbn10,
-        isbn13: response.isbn13,
-        pages: response.pages,
-        year: response.year,
-        rating: response.rating,
-        desc: response.desc,
-        price: response.price,
-        image: response.image,
-        url: response.url,
-        language: response.language,
-      })
-        .then(() => {
-          console.log('Write to database successful');
-        })
-        .catch((error) => {
-          console.error('Error writing to database:', error);
-        });
+          .then(() => {
+            console.log('Write to database successful');
+          })
+          .catch((error) => {
+            console.error('Error writing to database:', error);
+          });
+      }
+      dispatch(setIsBaskets(!isBasket));
+    } catch (error) {
+      console.error('Error updating favorites:', error);
     }
   };
+
   const PreviewBook = () => {};
   const Facebook = () => {};
   const Twiter = () => {};
   const more = () => {};
-  const Heart = () => {
-    if (isFavorite) {
-      dispatch(removeFromFavorites(response.isbn13));
-      const favoritesRef = ref(
-        database,
-        `users/${userName}/favorites/${response.isbn13}`
-      );
-      remove(favoritesRef)
-        .then(() => {
-          console.log('Remove from database successful');
+
+  const Heart = async () => {
+    const favoritesRef = ref(
+      database,
+      `users/${userName}/favorites/${response.isbn13}`
+    );
+    try {
+      if (isFavorite) {
+        dispatch(removeFromFavorites(response.isbn13));
+        await remove(favoritesRef)
+          .then(() => {
+            console.log('Remove from database successful');
+          })
+          .catch((error) => {
+            console.error('Error removing from database:', error);
+          });
+      } else {
+        dispatch(addToFavorites(response));
+        await set(favoritesRef, {
+          title: response.title,
+          error: response.error,
+          subtitle: response.subtitle,
+          authors: response.authors,
+          publisher: response.publisher,
+          isbn10: response.isbn10,
+          isbn13: response.isbn13,
+          pages: response.pages,
+          year: response.year,
+          rating: response.rating,
+          desc: response.desc,
+          price: response.price,
+          image: response.image,
+          url: response.url,
+          language: response.language,
         })
-        .catch((error) => {
-          console.error('Error removing from database:', error);
-        });
-    } else {
-      dispatch(addToFavorites(response));
-      const favoritesRef = ref(
-        database,
-        `users/${userName}/favorites/${response.isbn13}`
-      );
-      set(favoritesRef, {
-        title: response.title,
-        error: response.error,
-        subtitle: response.subtitle,
-        authors: response.authors,
-        publisher: response.publisher,
-        isbn10: response.isbn10,
-        isbn13: response.isbn13,
-        pages: response.pages,
-        year: response.year,
-        rating: response.rating,
-        desc: response.desc,
-        price: response.price,
-        image: response.image,
-        url: response.url,
-        language: response.language,
-      })
-        .then(() => {
-          console.log('Write to database successful');
-        })
-        .catch((error) => {
-          console.error('Error writing to database:', error);
-        });
+          .then(() => {
+            console.log('Write to database successful');
+          })
+          .catch((error) => {
+            console.error('Error writing to database:', error);
+          });
+      }
+      dispatch(setIsFavorites(!isFavorite));
+    } catch (error) {
+      console.error('Error updating favorites:', error);
     }
-    console.log('After dispatch:', store.getState());
   };
   return (
     <AllWrapper>
@@ -188,7 +229,7 @@ export const SelectedPosts: React.FC<BookProps> = ({ response }) => {
         <FontWrapper>
           <FontAwesomeIcon
             onClick={Heart}
-            icon={isFavorite ? fasHeart : faHeart}
+            icon={isFavorite || isFavorites ? fasHeart : faHeart}
           />{' '}
         </FontWrapper>
         <InfoWrapper>
@@ -208,7 +249,7 @@ export const SelectedPosts: React.FC<BookProps> = ({ response }) => {
               <br /> ISBN-13
             </TextWrapper>
             <Text2Wrapper>
-              {response.authors}
+              {truncateText(response.authors, 20)}
               <br />
               {response.publisher}
               <br />
@@ -226,9 +267,11 @@ export const SelectedPosts: React.FC<BookProps> = ({ response }) => {
             </Text2Wrapper>
           </DopInfoWrapper>
           <Button variant="primary" onClick={addToCart}>
-            {isItemInCart ? 'Remove from cart' : 'Add to cart'}
+            {isBasket || isBaskets ? 'Remove from cart' : 'Add to cart'}
           </Button>
-          <Button2 onClick={PreviewBook}>Preview book</Button2>
+          <ButtonWrapper>
+            <Button2 onClick={PreviewBook}>Preview book</Button2>
+          </ButtonWrapper>
         </InfoWrapper>
       </ImageAndInfoBookWrapper>
       <TabsSelectedBook book={response} />
@@ -251,11 +294,14 @@ const FontWrapper = styled.div`
   padding: 16px;
   transform: translate(40%, 15%);
   z-index: 1;
+  cursor: pointer;
 
   & svg {
-    cursor: pointer;
     width: 18px;
     height: 16px;
+  }
+  &:hover {
+    background-color: silver;
   }
 `;
 
@@ -290,6 +336,7 @@ const InfoWrapper = styled.div`
 
   & button {
     width: -webkit-fill-available;
+    margin-bottom: 40px;
   }
 `;
 
@@ -331,4 +378,10 @@ const Text2Wrapper = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 32px;
+`;
+
+const ButtonWrapper = styled.div`
+  & button {
+    margin-bottom: 0;
+  }
 `;

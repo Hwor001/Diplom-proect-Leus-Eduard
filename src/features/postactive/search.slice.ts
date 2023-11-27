@@ -37,11 +37,7 @@ const searchBookSlice = createSlice({
   },
 });
 
-export const {
-  getSearchBook,
-  getSearchBookSuccess,
-  getSearchBookFailure,
-  //   setPageCount,
-} = searchBookSlice.actions;
+export const { getSearchBook, getSearchBookSuccess, getSearchBookFailure } =
+  searchBookSlice.actions;
 
 export default searchBookSlice.reducer;

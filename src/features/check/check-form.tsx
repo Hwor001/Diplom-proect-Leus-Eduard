@@ -1,16 +1,15 @@
 import styled from 'styled-components';
 import { CheckBook } from '#ui/post/check-post';
-import { Response } from '#features/auth/types';
 
 interface BookProps {
   response: Response;
 }
 
-export const CheckForm: React.FC<BookProps> = ({ response }) => {
+export const CheckForm: React.FC = () => {
   return (
     <AllWrapper>
       <CheckWrapper>
-        <CheckBook response={response}></CheckBook>
+        <CheckBook></CheckBook>
       </CheckWrapper>
     </AllWrapper>
   );

@@ -43,3 +43,41 @@ export const searchBookApi = {
     });
   },
 };
+
+export const searchBooksApi = {
+  fetchBooks: (
+    searchResultsText: string,
+    page: number
+  ): Promise<SeachBooks> => {
+    return fetch(`${baseUrl}/search/${searchResultsText}/${page}`).then(
+      (response) => {
+        if (!response.ok) {
+          throw new Error('SERVER ERROR');
+        }
+        return response.json();
+      }
+    );
+  },
+};
+
+export const popularBooksApi = {
+  fetchBooks: (page: number): Promise<SeachBooks> => {
+    return fetch(`${baseUrl}/search/popular/${page}`).then((response) => {
+      if (!response.ok) {
+        throw new Error('SERVER ERROR');
+      }
+      return response.json();
+    });
+  },
+};
+
+export const similarBooksApi = {
+  similarBooks: (searchQuery: string): Promise<SeachBooks> => {
+    return fetch(`${baseUrl}/search/?q=${searchQuery}`).then((response) => {
+      if (!response.ok) {
+        throw new Error('SERVER ERROR');
+      }
+      return response.json();
+    });
+  },
+};

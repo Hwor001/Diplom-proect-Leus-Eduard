@@ -1,34 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SeachBooks } from '../auth/types';
 
-type similarState = {
+type popularState = {
   books: SeachBooks | null;
   loading: boolean;
   error: string | null;
   currentIndex: number;
 };
 
-const initialState: similarState = {
+const initialState: popularState = {
   books: null,
   loading: false,
   error: null,
   currentIndex: 0,
 };
 
-const similarSlice = createSlice({
-  name: 'similar',
+const popularSlice = createSlice({
+  name: 'dropdown',
   initialState,
   reducers: {
-    similarBooksStart(state, action: PayloadAction<{ searchQuery: string }>) {
+    popularBooksStart(state, action: PayloadAction<{ page: number }>) {
       state.loading = true;
     },
-    similarBooksSuccess(state, action: PayloadAction<SeachBooks>) {
+    popularBooksSuccess(state, action: PayloadAction<SeachBooks>) {
       state.loading = false;
       state.books = action.payload;
       state.error = null;
       state.currentIndex = 0;
     },
-    similarBooksFailure(state, action: PayloadAction<string>) {
+    popularBooksFailure(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
     },
@@ -39,10 +39,10 @@ const similarSlice = createSlice({
 });
 
 export const {
-  similarBooksStart,
-  similarBooksSuccess,
-  similarBooksFailure,
+  popularBooksStart,
+  popularBooksSuccess,
+  popularBooksFailure,
   setCurrentIndex,
-} = similarSlice.actions;
+} = popularSlice.actions;
 
-export default similarSlice.reducer;
+export default popularSlice.reducer;

@@ -46,17 +46,29 @@ export const PaginationSearch: React.FC<Props> = ({
     <PagePagination>
       <Left>
         <StyledArrow icon={faArrowLeft} onClick={handleDecrement} />
-        <Text>Prev</Text>
+        <Text onClick={handleDecrement}>Prev</Text>
       </Left>
       <JumperDiv>
         {currentPage !== 1 ? (
-          <JumpButton onClick={() => onPageChange(1)}>1</JumpButton>
+          <JumpButton
+            isActive={currentPage === 1}
+            onClick={() => onPageChange(1)}
+          >
+            1
+          </JumpButton>
         ) : null}
-        {currentPage > 2 ? <JumpButton>...</JumpButton> : null}
-        <JumpButton>{currentPage}</JumpButton>
-        {pageCount - currentPage > 1 ? <JumpButton>...</JumpButton> : null}
+        {currentPage > 2 ? <JumpButton isActive={true}>...</JumpButton> : null}
+        <JumpButton isActive={true}>{currentPage}</JumpButton>
+        {pageCount - currentPage > 1 ? (
+          <JumpButton isActive={true}>...</JumpButton>
+        ) : null}
         {currentPage !== pageCount ? (
-          <JumpButton onClick={handlePageChange}>{pageCount}</JumpButton>
+          <JumpButton
+            isActive={currentPage === pageCount}
+            onClick={handlePageChange}
+          >
+            {pageCount}
+          </JumpButton>
         ) : null}
         {pageCount > 10 && (
           <JumperDiv>
@@ -72,7 +84,7 @@ export const PaginationSearch: React.FC<Props> = ({
         )}
       </JumperDiv>
       <Right>
-        <Text>Next</Text>
+        <Text onClick={handleIncrement}>Next</Text>
         <StyledArrow icon={faArrowRight} onClick={handleIncrement} />
       </Right>
     </PagePagination>
@@ -84,6 +96,13 @@ const Text = styled.p`
   font-size: 16px;
   font-weight: 700;
   line-height: 24px;
+  color: #a8a8a8;
+  cursor: pointer;
+  padding: 0 10px;
+
+  &:hover {
+    color: black;
+  }
 `;
 
 const PagePagination = styled.div`
@@ -109,18 +128,19 @@ const JumperDiv = styled.div`
   }
 `;
 
-const JumpButton = styled.button`
+const JumpButton = styled.button<{ isActive: boolean }>`
   all: unset;
-  cursor: pointer;
   padding: 10px;
   margin: 5px;
   font-family: 'Helios';
   font-size: 16px;
   font-weight: 700;
   line-height: 24px;
+  color: ${({ isActive }) => (isActive ? 'black' : '#a8a8a8')};
+  cursor: ${({ isActive }) => (isActive ? 'auto' : 'pointer')};
 
   &:hover {
-    color: var(--system-primary-color);
+    color: black;
   }
 `;
 
@@ -134,12 +154,14 @@ const StyledArrow = styled(FontAwesomeIcon)`
   fill: white;
   transform: translateY(-7px);
   stroke: var(--text-primary-color);
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 18px;
   object-fit: cover;
   position: relative;
   top: 5px;
   cursor: pointer;
+  color: black;
+  transform: translateY(-5px);
 `;
 
 const StyledInput = styled.input`

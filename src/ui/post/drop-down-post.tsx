@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { SeachBooks } from '#features/auth/types';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '#hooks';
+import { fetchBooksStart } from '#features/postactive/dropdown.slice';
 
 type DropDownProps = {
   searchResultsText: string;
@@ -12,27 +14,20 @@ export const DropDown: React.FC<DropDownProps> = ({
   searchResultsText,
   post,
 }) => {
-  const [books, setBooks] = useState<SeachBooks | null>(null);
+  const dispatch = useAppDispatch();
+  const { books, error } = useAppSelector((state) => state.dropdown);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `https://api.itbook.store/1.0/search/${searchResultsText}`
-        );
-        const data: SeachBooks = await response.json();
-        setBooks(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
     if (searchResultsText.trim() !== '') {
-      fetchData();
+      dispatch(fetchBooksStart({ searchResultsText, page: 1 }));
     }
-  }, [searchResultsText]);
+  }, [dispatch, searchResultsText]);
 
-  if (!books) {
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!books || !books.books) {
     return null;
   }
 

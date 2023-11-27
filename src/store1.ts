@@ -5,27 +5,31 @@ import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from './sagas';
 import postsReducer from './features/postactive/all-post.slice';
 import postReducer from './features/postactive/Post.slice';
-import favoriteBooksReducer from '#features/postactive/favorite.slice';
-import basketReducer from '#features/postactive/basket.slice';
 import basketQualityReducer from '#features/postactive/quantity.slice';
-import authReducer from '#features/postactive/similar.slice';
-import favorite2Reducer from '#features/postactive/favorite2.slice';
+import similarReducer from '#features/postactive/similar.slice';
 import selecteReducer from '#features/postactive/selected-book.slice';
 import searchReducer from '#features/postactive/search.slice';
+import dropdownReducer from '#features/postactive/dropdown.slice';
+import popularReducer from '#features/postactive/popular.slice';
+import cartAndFavoritesReducer from '#features/postactive/cartAndFavoritesSlice';
+import favoriteReducer from '#features/postactive/favorite.slice';
+import basketReducer from '#features/postactive/basket.slice';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
   allPosts: postsReducer,
-  favoriteBooks: favoriteBooksReducer,
-  basketBooks: basketReducer,
   Post: postReducer,
   signUpForm: signUpFormReducer,
   basketQuantity: basketQualityReducer,
-  auth: authReducer,
-  favorite: favorite2Reducer,
+  similar: similarReducer,
   selected: selecteReducer,
   searchBook: searchReducer,
+  dropdown: dropdownReducer,
+  popular: popularReducer,
+  cartAndFavorites: cartAndFavoritesReducer,
+  favorite: favoriteReducer,
+  basket: basketReducer,
 });
 
 export const store = configureStore({

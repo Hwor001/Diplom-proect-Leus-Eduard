@@ -1,16 +1,11 @@
 import { styled } from 'styled-components';
 import { BasketBook } from '#ui/post/post-basket';
-import { Response } from '#features/auth/types';
 
-interface BookProps {
-  response: Response;
-}
-
-export const BasketForm: React.FC<BookProps> = ({ response }) => {
+export const BasketForm: React.FC = () => {
   return (
     <AllWrapper>
       <BasketWrapper>
-        <BasketBook response={response} />
+        <BasketBook />
       </BasketWrapper>
     </AllWrapper>
   );

@@ -3,21 +3,20 @@ import { BackLink } from '../../features/back-link/back-link';
 import { Title } from '#ui/title/title';
 import Header from '#ui/header/header';
 import { BasketForm } from '#features/basket-form/basket-form';
-import { Response, SeachBooks } from '#features/auth/types';
+import { SeachBooks } from '#features/auth/types';
 
 interface Props {
   handleSearch: (searchText: string) => void;
-  response: Response;
   post: SeachBooks;
 }
 
-export const Basket: React.FC<Props> = ({ handleSearch, response, post }) => {
+export const Basket: React.FC<Props> = ({ handleSearch, post }) => {
   return (
     <MainTemplate
       header={<Header handleSearch={handleSearch} post={post} />}
       backLink={<BackLink />}
       title={<Title>Your cart</Title>}
-      body={<BasketForm response={response} />}
+      body={<BasketForm />}
     />
   );
 };

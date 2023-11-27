@@ -3,18 +3,50 @@ import { styled } from 'styled-components';
 import { RootState } from '../../store1';
 import { useSelector } from 'react-redux';
 import { Quantity } from '#ui/element/quantity';
+import { useState, useEffect } from 'react';
+import { ref, get, DataSnapshot, remove } from 'firebase/database';
+import { auth } from '../../firebase';
+import { database } from '../../firebase';
 
-interface BookProps {
-  response: Response;
-}
-
-export const CheckBook: React.FC<BookProps> = ({ response }) => {
-  const item = useSelector((state: RootState) => state.basketBooks.itemsInCart);
+export const CheckBook: React.FC = () => {
+  const [userName, setUserName] = useState('');
+  const [favoriteBooks, setFavoriteBooks] = useState<Response[]>([]);
   const basketQuantity = useSelector(
     (state: RootState) => state.basketQuantity
   );
 
-  const totalSum = item.reduce(
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        const displayName = user.displayName || '';
+        setUserName(displayName);
+      }
+    });
+
+    const fetchData = async () => {
+      const favoritesRef = ref(database, `users/${userName}/basket`);
+      try {
+        const snapshot: DataSnapshot = await get(favoritesRef);
+        if (snapshot.exists()) {
+          const favoritesData: Response[] = [];
+          snapshot.forEach((childSnapshot) => {
+            favoritesData.push(childSnapshot.val());
+          });
+          setFavoriteBooks(favoritesData);
+        }
+      } catch (error) {
+        console.error('Error fetching data from database:', error);
+      }
+    };
+
+    if (userName) {
+      fetchData();
+    }
+
+    return () => unsubscribe();
+  }, [userName]);
+
+  const totalSum = favoriteBooks.reduce(
     (sum, element) =>
       sum +
       parseFloat(element.price.replace(/\$/g, '')) *
@@ -27,8 +59,8 @@ export const CheckBook: React.FC<BookProps> = ({ response }) => {
 
   return (
     <>
-      {item.length > 0
-        ? item.map((element: Response) => (
+      {favoriteBooks.length > 0
+        ? favoriteBooks.map((element: Response) => (
             <PostsWrapper key={element.isbn13}>
               <ImgInfoWrapper>
                 <PostImg>

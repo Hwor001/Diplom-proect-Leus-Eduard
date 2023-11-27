@@ -3,7 +3,7 @@ import { BackLink } from '../../features/back-link/back-link';
 import { Title } from '#ui/title/title';
 import Header from '#ui/header/header';
 import { SelectedBookForm } from '#features/selected-book/selected-book-form';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { SeachBooks } from '#features/auth/types';
 import { useAppDispatch, useAppSelector } from '#hooks';
@@ -21,6 +21,7 @@ export const SelectedBook: React.FC<Props> = ({
   post,
 }) => {
   const { isbn13 } = useParams();
+  const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const { book, isLoading, error } = useAppSelector((state) => state.selected);
 
@@ -28,7 +29,8 @@ export const SelectedBook: React.FC<Props> = ({
     if (isbn13) {
       dispatch(getBookByIsbn(isbn13));
     }
-  }, [dispatch, isbn13]);
+    window.scrollTo(0, 0);
+  }, [dispatch, isbn13, pathname]);
 
   if (isLoading) {
     return <div>Loading...</div>;

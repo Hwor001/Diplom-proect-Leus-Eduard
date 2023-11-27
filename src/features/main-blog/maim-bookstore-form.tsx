@@ -5,13 +5,9 @@ import { NewsLetter } from '#features/newsletter/newsletter-form';
 
 type ListOfPostsProps = {
   posts: Post[];
-  response: Response;
 };
 
-export const MainBookStoreForm: React.FC<ListOfPostsProps> = ({
-  posts,
-  response,
-}) => {
+export const MainBookStoreForm: React.FC<ListOfPostsProps> = ({ posts }) => {
   const getPostIsbn13AndElement = (isbn13: number) =>
     posts.find((item) => item.isbn13 === isbn13);
   const getHalfOfCards = (part: 'left'): number[] => {
@@ -28,11 +24,7 @@ export const MainBookStoreForm: React.FC<ListOfPostsProps> = ({
     <AllWrapper>
       <MainBookStoreWrapper>
         {getHalfOfCards('left').map((element, isbn13) => (
-          <Posts
-            key={isbn13}
-            post={getPostIsbn13AndElement(element)!}
-            response={response}
-          />
+          <Posts key={isbn13} post={getPostIsbn13AndElement(element)!} />
         ))}
       </MainBookStoreWrapper>
       <NewsLetter />

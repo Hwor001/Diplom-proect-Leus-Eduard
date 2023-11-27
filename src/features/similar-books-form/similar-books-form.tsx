@@ -4,11 +4,10 @@ import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import { PostsSimilar } from '#ui/post/post-similar';
 import {
-  setSimilarBooks,
+  similarBooksStart,
   setCurrentIndex,
 } from '#features/postactive/similar.slice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store1';
+import { useAppDispatch, useAppSelector } from '#hooks';
 
 interface SimilarBoookFormProps {
   title: string;
@@ -17,22 +16,20 @@ interface SimilarBoookFormProps {
 export const SimilarBoookForm: React.FC<SimilarBoookFormProps> = ({
   title,
 }) => {
-  const dispatch = useDispatch();
-  const { similarBooks, currentIndex } = useSelector(
-    (state: RootState) => state.auth
-  ) || { similarBooks: null, currentIndex: 0 };
-  const searchQuery = encodeURIComponent(title);
+  const dispatch = useAppDispatch();
+  const { books, currentIndex, error } = useAppSelector(
+    (state) => state.similar
+  );
+
   useEffect(() => {
-    fetch(`https://api.itbook.store/1.0/search/?q=${searchQuery}`)
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch(setSimilarBooks(data));
-        dispatch(setCurrentIndex(0));
-      });
-  }, [searchQuery, title, dispatch]);
+    if (title) {
+      dispatch(similarBooksStart({ searchQuery: title }));
+      dispatch(setCurrentIndex(0));
+    }
+  }, [title, dispatch]);
 
   const handleNextBook = () => {
-    const bookLength = similarBooks?.books?.length || 0;
+    const bookLength = books?.books?.length || 0;
     const maxIndex = bookLength - 1;
     const nextIndex = currentIndex < maxIndex ? currentIndex + 1 : currentIndex;
 
@@ -46,9 +43,14 @@ export const SimilarBoookForm: React.FC<SimilarBoookFormProps> = ({
     dispatch(setCurrentIndex(prevIndex));
   };
 
-  if (!similarBooks) {
-    return <div>Loading...</div>;
+  if (error) {
+    return <div>Error: {error}</div>;
   }
+
+  if (!books || !books.books) {
+    return null;
+  }
+
   return (
     <AllSimilarBoookWrapper>
       <SimilarBoookWrapper>
@@ -58,7 +60,7 @@ export const SimilarBoookForm: React.FC<SimilarBoookFormProps> = ({
           <StyledFontAwesomeIcon icon={faArrowRight} onClick={handleNextBook} />
         </FontsWrapper>
       </SimilarBoookWrapper>
-      <PostsSimilar response={similarBooks} currentIndex={currentIndex} />
+      <PostsSimilar response={books} currentIndex={currentIndex} />
     </AllSimilarBoookWrapper>
   );
 };
@@ -85,4 +87,7 @@ const TextWrapper = styled.h2`
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   padding: 10px;
   cursor: pointer;
+  &:hover {
+    background-color: silver;
+  }
 `;

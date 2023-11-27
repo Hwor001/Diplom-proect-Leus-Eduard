@@ -3,30 +3,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import { PostsSimilar } from '#ui/post/post-similar';
+import { useAppDispatch, useAppSelector } from '#hooks';
 import {
-  setSimilarBooks,
+  popularBooksStart,
   setCurrentIndex,
-} from '#features/postactive/similar.slice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store1';
+} from '#features/postactive/popular.slice';
 
 export const PopularBookForm: React.FC = () => {
-  const dispatch = useDispatch();
-  const { similarBooks, currentIndex } = useSelector(
-    (state: RootState) => state.auth
-  ) || { similarBooks: null, currentIndex: 0 };
+  const dispatch = useAppDispatch();
+  const { books, error, currentIndex } = useAppSelector(
+    (state) => state.popular
+  ) || { currentIndex: 0 };
 
   useEffect(() => {
-    fetch(`https://api.itbook.store/1.0/search/popular`)
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch(setSimilarBooks(data));
-        dispatch(setCurrentIndex(0));
-      });
+    dispatch(popularBooksStart({ page: 1 }));
+    dispatch(setCurrentIndex(0));
   }, [dispatch]);
 
   const handleNextBook = () => {
-    const bookLength = similarBooks?.books?.length || 0;
+    const bookLength = books?.books?.length || 0;
     const maxIndex = bookLength - 1;
     const nextIndex = currentIndex < maxIndex ? currentIndex + 1 : currentIndex;
 
@@ -40,9 +35,14 @@ export const PopularBookForm: React.FC = () => {
     dispatch(setCurrentIndex(prevIndex));
   };
 
-  if (!similarBooks) {
-    return <div>Loading...</div>;
+  if (error) {
+    return <div>Error: {error}</div>;
   }
+
+  if (!books || !books.books) {
+    return null;
+  }
+
   return (
     <AllSimilarBoookWrapper>
       <SimilarBoookWrapper>
@@ -53,7 +53,7 @@ export const PopularBookForm: React.FC = () => {
         </FontsWrapper>
       </SimilarBoookWrapper>
       <PostsWrapper>
-        <PostsSimilar response={similarBooks} currentIndex={currentIndex} />
+        <PostsSimilar response={books} currentIndex={currentIndex} />
       </PostsWrapper>
     </AllSimilarBoookWrapper>
   );
@@ -85,4 +85,7 @@ const TextWrapper = styled.h2`
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   padding: 10px;
   cursor: pointer;
+  &:hover {
+    background-color: silver;
+  }
 `;

@@ -9,7 +9,7 @@ interface BookProps {
 
 export const SelectedBookForm: React.FC<BookProps> = ({ response }) => {
   if (!response || !response.title) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
   return (
     <SelectedBookWrapper>

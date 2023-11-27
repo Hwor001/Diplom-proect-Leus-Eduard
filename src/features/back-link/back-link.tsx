@@ -20,7 +20,6 @@ export const BackLink: React.FC = () => {
 const BackLinkWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
-  cursor: pointer;
 
   & svg {
     color: var(--text-primary-color);

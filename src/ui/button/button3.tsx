@@ -56,6 +56,10 @@ const ButtonWrapper = styled.button<{
     }
   }}
 
+  &:hover {
+    background-color: #dbcdcd;
+  }
+
   &:disabled {
     cursor: none;
     opacity: 0.67;
