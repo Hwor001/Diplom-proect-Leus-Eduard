@@ -270,14 +270,11 @@ const UserPopup = styled.div`
 
 const HeaderWrapper = styled.div`
   display: flex;
-  width: 80%;
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
   position: fixed;
   top: 0;
-  left: 50%;
+  left: 0;
   background-color: #f3f3f3;
-  transform: translateX(-50%);
   justify-content: space-between;
   border-bottom: 1px solid #e7e7e7;
   z-index: 3;
