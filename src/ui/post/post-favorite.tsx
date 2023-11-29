@@ -14,7 +14,7 @@ import { ref, get, DataSnapshot, remove } from 'firebase/database';
 import { auth } from '../../firebase';
 import { database } from '../../firebase';
 import { setIsFavorites } from '../../features/postactive/cartAndFavoritesSlice';
-import { removeFromFavorites } from '../../features/postactive/favorite.slice';
+import { removeFromFavorites } from '../../features/favorite-post/favorite.slice';
 
 interface StarRatingProps {
   rating: number;

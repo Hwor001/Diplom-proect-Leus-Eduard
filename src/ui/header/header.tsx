@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import BookstoreWord from '../../svg/Bookstore.svg';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { DropDown } from '#ui/post/drop-down-post';
+import { DropDown } from '#ui/drop-down post/drop-down-post';
 import { SeachBooks } from '#features/auth/types';
 import { auth, database } from '../../firebase';
 import { getAuth, signOut } from 'firebase/auth';
@@ -201,6 +201,7 @@ export const Header: React.FC<Props> = ({ handleSearch, post }) => {
 
 const Wrapper = styled.div`
   margin: 0 auto;
+  overflow-y: auto;
 `;
 
 const All = styled.div`
@@ -209,6 +210,7 @@ const All = styled.div`
   border-bottom: 1px solid #e7e7e7;
   padding: 26px 0;
   width: 288px;
+  flex-shrink: 0;
 `;
 
 const Button = styled.div`
@@ -258,6 +260,8 @@ const UserPopup = styled.div`
   background: #f3f3f3;
   display: flex;
   height: 100vh;
+  flex-direction: column;
+  overflow-y: auto;
 
   & button {
     transform: translate(35px, 0px);
@@ -265,10 +269,10 @@ const UserPopup = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
+  display: flex;
   width: 80%;
   max-width: 1200px;
   margin: 0 auto;
-  display: flex;
   position: fixed;
   top: 0;
   left: 50%;
@@ -318,6 +322,7 @@ const FontWrapper = styled.div`
 
 const HeaderContainer = styled.div`
   padding-top: 103px;
+  background-color: #f3f3f3;
 `;
 
 const TextLink = styled(Link)`

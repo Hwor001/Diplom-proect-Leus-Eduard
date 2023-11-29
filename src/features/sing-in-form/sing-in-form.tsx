@@ -4,23 +4,32 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setEmail, setPassword } from '../sing-up-form/sing-up-form.slice';
-import { Button2 } from '#ui/button/button2';
+import { ForgotPasswordButton } from '#ui/button/forgotPasswordButton';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
 
 export const SingInForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const email = useAppSelector(({ signUpForm }) => signUpForm.email);
   const password = useAppSelector(({ signUpForm }) => signUpForm.password);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string) => {
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        console.log(user);
-        navigate('/MainBookStore');
-      })
-      .catch(() => alert('Invalid user!'));
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      console.log(user);
+      navigate('/MainBookStore');
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Invalid email or password. Please try again.');
+    }
   };
 
   const ForgotPassword = () => {
@@ -47,10 +56,13 @@ export const SingInForm: React.FC = () => {
           dispatch(setPassword(currentTarget.value))
         }
       />
-      <Button2 onClick={ForgotPassword}>Forgot password ?</Button2>
+      <ForgotPasswordButton onClick={ForgotPassword}>
+        Forgot password ?
+      </ForgotPasswordButton>
       <Button variant="primary" onClick={() => handleLogin(email, password)}>
         Sing in
       </Button>
+      {error && <ErrorText>{error}</ErrorText>}
     </RegistrationWrapper>
   );
 };
@@ -62,4 +74,9 @@ const RegistrationWrapper = styled.div`
 
 const StyledInput = styled(Input)`
   margin-bottom: 8px;
+`;
+
+const ErrorText = styled.p`
+  color: red;
+  margin-top: 8px;
 `;

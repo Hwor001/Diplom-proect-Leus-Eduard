@@ -6,7 +6,11 @@ interface Props {
   onClick: () => void;
 }
 
-export const Button2: React.FC<Props> = ({ children, disabled, onClick }) => {
+export const ForgotPasswordButton: React.FC<Props> = ({
+  children,
+  disabled,
+  onClick,
+}) => {
   return (
     <ButtonWrapper type="button" disabled={disabled} onClick={onClick}>
       {children}

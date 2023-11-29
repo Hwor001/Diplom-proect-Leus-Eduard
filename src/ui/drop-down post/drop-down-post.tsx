@@ -3,7 +3,7 @@ import { SeachBooks } from '#features/auth/types';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '#hooks';
-import { fetchBooksStart } from '#features/postactive/dropdown.slice';
+import { fetchBooksStart } from '#ui/drop-down post/dropdown.slice';
 
 type DropDownProps = {
   searchResultsText: string;

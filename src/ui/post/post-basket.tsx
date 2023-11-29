@@ -5,13 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { RootState } from '../../store1';
 import { useSelector, useDispatch } from 'react-redux';
-import { Quantity } from '#ui/element/quantity';
+import { Quantity } from '#ui/quantity/quantity';
 import { Button } from '#ui/button/button';
 import { useState, useEffect } from 'react';
 import { ref, get, DataSnapshot, remove } from 'firebase/database';
 import { auth } from '../../firebase';
 import { database } from '../../firebase';
-import { deleteItemFromCart } from '../../features/postactive/basket.slice';
+import { deleteItemFromCart } from '../../features/basket-form/basket.slice';
 
 export const BasketBook: React.FC = () => {
   const navigate = useNavigate();

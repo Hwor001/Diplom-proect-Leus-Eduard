@@ -66,6 +66,7 @@ const SubscribeWrapper = styled.h2`
   font-weight: 700;
   font-size: 40px;
   line-height: 60px;
+  cursor: default;
 `;
 
 const TextWrapper = styled.p`
@@ -74,4 +75,5 @@ const TextWrapper = styled.p`
   font-size: 18px;
   line-height: 28px;
   color: #a8a8a8;
+  cursor: default;
 `;

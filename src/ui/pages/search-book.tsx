@@ -5,7 +5,7 @@ import { SearchBookForm } from '#features/search/search-book-form';
 import { useState, useEffect } from 'react';
 import { SeachBooks } from '#features/auth/types';
 import { useAppDispatch, useAppSelector } from '#hooks';
-import { getSearchBook } from '#features/postactive/search.slice';
+import { getSearchBook } from '#features/search/search.slice';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface Props {

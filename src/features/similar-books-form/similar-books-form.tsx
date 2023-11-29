@@ -6,7 +6,7 @@ import { PostsSimilar } from '#ui/post/post-similar';
 import {
   similarBooksStart,
   setCurrentIndex,
-} from '#features/postactive/similar.slice';
+} from '#features/similar-books-form/similar.slice';
 import { useAppDispatch, useAppSelector } from '#hooks';
 
 interface SimilarBoookFormProps {

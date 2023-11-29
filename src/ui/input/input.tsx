@@ -45,6 +45,7 @@ const LabelText = styled.div`
 const InputWrapper = styled.input`
   all: unset;
   width: 480px;
+  cursor: text;
   height: 56px;
   text-indent: 20px;
   box-sizing: border-box;

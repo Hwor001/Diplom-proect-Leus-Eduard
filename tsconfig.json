@@ -21,5 +21,5 @@
       "#ui/*": ["./src/ui/*"]
     }
   },
-  "include": ["src", "src/ui/pages/.tsx", "src/ui/element/.tsx"]
+  "include": ["src", "src/ui/pages/.tsx", "src/ui/quantity/.tsx"]
 }

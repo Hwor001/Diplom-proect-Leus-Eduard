@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '#hooks';
 import {
   popularBooksStart,
   setCurrentIndex,
-} from '#features/postactive/popular.slice';
+} from '#features/popular-form/popular.slice';
 
 export const PopularBookForm: React.FC = () => {
   const dispatch = useAppDispatch();

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SeachBooks } from '../auth/types';
+import { SeachBooks } from '../../features/auth/types';
 
 type DropdownState = {
   books: SeachBooks | null;

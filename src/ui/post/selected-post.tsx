@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Response } from '#features/auth/types';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setQuantity } from '../../features/postactive/quantity.slice';
+import { setQuantity } from '../quantity/quantity.slice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faStar as fasFaStar,
@@ -12,9 +12,8 @@ import { faStar, faHeart } from '@fortawesome/free-regular-svg-icons';
 import { TabsSelectedBook } from '#features/tabs-active/tabs-selected-book';
 import { NewsLetter } from '#features/newsletter/newsletter-form';
 import { Button } from '#ui/button/button';
-import { Button2 } from '#ui/button/button2';
 import { faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { ref, set, remove, get, DataSnapshot } from 'firebase/database';
+import { ref, set, remove, get } from 'firebase/database';
 import { SimilarBoookForm } from '#features/similar-books-form/similar-books-form';
 import { useState, useEffect } from 'react';
 import { auth, database } from '../../firebase';
@@ -25,11 +24,11 @@ import {
 import {
   setItemInCart,
   deleteItemFromCart,
-} from '../../features/postactive/basket.slice';
+} from '../../features/basket-form/basket.slice';
 import {
   addToFavorites,
   removeFromFavorites,
-} from '../../features/postactive/favorite.slice';
+} from '../../features/favorite-post/favorite.slice';
 
 interface StarRatingProps {
   rating: number;
@@ -169,7 +168,6 @@ export const SelectedPosts: React.FC<BookProps> = ({ response }) => {
     }
   };
 
-  const PreviewBook = () => {};
   const Facebook = () => {};
   const Twiter = () => {};
   const more = () => {};
@@ -269,9 +267,6 @@ export const SelectedPosts: React.FC<BookProps> = ({ response }) => {
           <Button variant="primary" onClick={addToCart}>
             {isBasket || isBaskets ? 'Remove from cart' : 'Add to cart'}
           </Button>
-          <ButtonWrapper>
-            <Button2 onClick={PreviewBook}>Preview book</Button2>
-          </ButtonWrapper>
         </InfoWrapper>
       </ImageAndInfoBookWrapper>
       <TabsSelectedBook book={response} />
@@ -378,10 +373,4 @@ const Text2Wrapper = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 32px;
-`;
-
-const ButtonWrapper = styled.div`
-  & button {
-    margin-bottom: 0;
-  }
 `;

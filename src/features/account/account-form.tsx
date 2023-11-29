@@ -11,7 +11,7 @@ import {
 import { Title } from '#ui/title/title';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
-import { Button3 } from '#ui/button/button3';
+import { CancelButton } from '#ui/button/cancelButton';
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -136,9 +136,9 @@ export const AccountForm: React.FC = () => {
         <Button variant="primary" onClick={newPasswordUpdate}>
           Save changes
         </Button>
-        <Button3 variant="primary" onClick={cancel}>
+        <CancelButton variant="primary" onClick={cancel}>
           cancel
-        </Button3>
+        </CancelButton>
       </ButtonWrapper>
     </RegistrationWrapper>
   );

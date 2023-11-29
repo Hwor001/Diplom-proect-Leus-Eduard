@@ -4,7 +4,7 @@ import {
   fetchBooksSuccess,
   fetchBooksFailure,
 } from './dropdown.slice';
-import { Book, SeachBooks } from '../auth/types';
+import { Book, SeachBooks } from '../../features/auth/types';
 import { searchBooksApi } from '../../features/auth/api';
 
 interface SearchBooksSuccessPayload {

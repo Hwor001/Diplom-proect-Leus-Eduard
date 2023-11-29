@@ -7,7 +7,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { SeachBooks } from '#features/auth/types';
 import { useAppDispatch, useAppSelector } from '#hooks';
-import { getBookByIsbn } from '../../features/postactive/selected-book.slice';
+import { getBookByIsbn } from '../../features/selected-book/selected-book.slice';
 
 interface Props {
   handleSearch: (searchText: string) => void;

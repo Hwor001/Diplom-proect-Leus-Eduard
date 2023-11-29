@@ -3,7 +3,7 @@ import {
   getAllposts,
   getAllPostsFailure,
   getAllPostsSuccess,
-} from '../postactive/all-post.slice';
+} from './all-post.slice';
 import { allPostsApi } from '../auth/api';
 import { PostsResponse, Book, Post } from '../auth/types';
 

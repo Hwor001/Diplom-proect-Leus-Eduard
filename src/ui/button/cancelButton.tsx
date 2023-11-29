@@ -7,7 +7,7 @@ type Props = {
   onClick: () => void;
 };
 
-export const Button3: React.FC<Props> = ({
+export const CancelButton: React.FC<Props> = ({
   variant,
   children,
   disabled,

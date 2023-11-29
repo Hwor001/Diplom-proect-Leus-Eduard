@@ -4,9 +4,9 @@ import { Title } from '#ui/title/title';
 import Header from '#ui/header/header';
 import { MainBookStoreForm } from '#features/main-blog/maim-bookstore-form';
 import { useAppDispatch, useAppSelector } from '#hooks';
-import { getAllposts } from '../../features/postactive/all-post.slice';
+import { getAllposts } from '../../features/main-blog/all-post.slice';
 import { useEffect } from 'react';
-import { Response, SeachBooks } from '#features/auth/types';
+import { SeachBooks } from '#features/auth/types';
 
 interface Props {
   handleSearch: (searchText: string) => void;

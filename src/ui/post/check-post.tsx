@@ -2,7 +2,7 @@ import { Response } from '#features/auth/types';
 import { styled } from 'styled-components';
 import { RootState } from '../../store1';
 import { useSelector } from 'react-redux';
-import { Quantity } from '#ui/element/quantity';
+import { Quantity } from '#ui/quantity/quantity';
 import { useState, useEffect } from 'react';
 import { ref, get, DataSnapshot, remove } from 'firebase/database';
 import { auth } from '../../firebase';

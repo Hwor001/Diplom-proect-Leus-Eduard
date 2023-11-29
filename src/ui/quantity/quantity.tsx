@@ -7,7 +7,7 @@ import {
   setQuantity,
   increaseQuantity,
   decreaseQuantity,
-} from '../../features/postactive/quantity.slice';
+} from './quantity.slice';
 import { useEffect } from 'react';
 
 export const Quantity: React.FC<{ isbn13: number }> = ({ isbn13 }) => {
