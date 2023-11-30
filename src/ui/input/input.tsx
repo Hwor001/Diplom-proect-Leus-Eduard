@@ -50,6 +50,13 @@ const InputWrapper = styled.input`
   text-indent: 20px;
   box-sizing: border-box;
   border: 1px solid #e7e7e7;
+  background: white;
+
+  &:focus {
+    border: 3px solid black;
+    border-radius: 5px;
+  }
+
   &::placeholder {
     font-family: 'Archivo';
     font-weight: 400;
